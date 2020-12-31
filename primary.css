@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#container {
+    font-family: 'Roboto Mono', monospace;
+    display: flex;
+    justify-content: center;
+}
+
+.todos {
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.wrapper {
+    width:100%;
+    padding:10px;
+}
+
+.input-form input {
+    width: 100%;
+    padding: 10px;
+}
+
+.input-form textarea {
+    width: 100%;
+    padding: 10px;
+    height: 150px;
+}
+
+.todo-wrapper {
+
+}
+
+.todo-title {
+    padding-bottom:10px;
+}
+
+.todo-dates {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.todo-content {
+    padding-top:10px;
+}
+
+.spacer {
+    width:100%;
+    display:block;
+    border:1px solid rgba(0, 0, 0, 0.097);
+    margin:5px;
+}
+
+.errors {
+    margin-top: 5px;
+    background: rgba(255, 0, 0, 0.412);
+    border-radius: 5px;
+    padding: 10px !important;
+    overflow-y: hidden;
+    max-height: 500px;
+    /* approximate max height */
+    position: relative;
+    -webkit-animation: slideIn 0.5s forwards;
+    -moz-animation: slideIn 0.5s forwards;
+    animation: slideIn 0.5s forwards;
+}
+
+.todo-controls {
+    padding-top:10px;
+    padding-bottom:10px;
+}
+
+.todo-wrapper input {
+    width:100%;
+}
+
+.todo-wrapper textarea {
+    width:100%; 
+}
+
+button {
+    padding: 5px;
+    outline:none;
+    border:none;
+}
+
+input { display:inline;}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(-900px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
