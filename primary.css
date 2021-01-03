@@ -7,12 +7,16 @@
     word-wrap:break-word;
 }
 
+body {
+    background:rgba(0, 0, 0, 0.933);
+}
+
 #container {
     font-family: 'Roboto Mono', monospace;
     display: flex;
     justify-content: center;
-    background:rgba(0, 0, 0, 0.933);
     color:white;
+
 }
 
 .todos {

@@ -1,16 +1,15 @@
+//server
 let db = firebase.database();
-var topUserPostsRef = firebase.database().ref('to/' + myUserId).orderByChild('starCount');
+let db_ref = db.ref();
+let data = db_ref.child('todos');
 
 
-let datee = new Date();
 
-
-let todos = {};
-
+// local
+let critError;
+let todos;
 let container = document.getElementById('container');
-let todoHTML_high = '';
-let todoHTML_low = ''
-let todoHTML_medium = '';
+let todoHTML = '';
 let input_title = '';
 let input_content = '';
 let input_priority = '';
@@ -23,30 +22,30 @@ let priority = [1, 2, 3];
 let filter = '';
 let sorting = '';
 
+
 function updateScreen() {
-    todoHTML_high = '';
-    todoHTML_low = ''
-    todoHTML_medium = '';
-    for (let keys in todos) {
+    db_ref.child("todos").once("value",snapshot => {
+        if (snapshot.exists()){
+            data.on('value', function(snap){
+                todoHTML= '';
+                todos = snap.val();
+                snap.forEach(function(child) {
+                        todoHTML += todoCreateHTML(child.key);
+                });
 
-        if (todos[keys].priority === 1) {
-            todoHTML_high += todoCreateHTML(keys);
+                mainScreen();
+            });
+        } else {
+            errorHandler(1);
+        
         }
-    }
-    for (let keys in todos) {
+        
+    });
+}
 
-        if (todos[keys].priority === 2) {
-            todoHTML_medium += todoCreateHTML(keys);
-        }
-    }
-    for (let keys in todos) {
+updateScreen();
 
-        if (todos[keys].priority === 3) {
-            todoHTML_low += todoCreateHTML(keys);
-        }
-    }
-
-
+function mainScreen() {
     container.innerHTML = `
     <div class="wrapper">
         <div class="input-form">
@@ -54,7 +53,7 @@ function updateScreen() {
             <div class="input-content"><textarea onkeyup="input_content = this.value"></textarea></div>
             ${(errors ? showErrors() : '')}
             <div class="todo-controls">
-            
+
                 <div>
                     <div><button onclick="addTodo()">Add todo</button></div>
                     <div class="priority">
@@ -88,18 +87,22 @@ function updateScreen() {
         </div>
        
         <div class="todos">
-            ${listTodos(filter, sorting)}
+            ${todoHTML}
             
         </div>
     </div>
     `;
 }
 
-updateScreen();
+function errorHandler(err) {
+
+    if(err === 1) { critError = 'Error ' + err + ' Reference database is missing.'; }
+
+    if(err === 2) { critError = '' }
+    container.innerHTML = critError;
+}
 
 function todoCreateHTML(id) {
-
-    console.log(id);
     return `
     <div class="todo-wrapper${(todos[id].completed === true ? ' fin' : '')}${setPriority(todos[id].priority)}" >
         <div class="todo-title">${(mode == 'edit' && id == selectedToEdit ? '<input class="edit" type="text" onkeyup="input_title_edit = this.value" value="' + todos[id].title +'">' : '<h1>' + todos[id].title + '</h1>')}</div>
@@ -121,26 +124,7 @@ function todoCreateHTML(id) {
     `;
 }
 
-function listTodos(filt, sort) {
-
-    if (sort == 1 || sort == '') {
-        if (filt == 1) {
-            return todoHTML_high;
-        }
-        if (filt == 2) {
-            return todoHTML_medium;
-        }
-        if (filt == 3) {
-            return todoHTML_low;
-        }
-        return todoHTML_high + todoHTML_medium + todoHTML_low;
-    }
-
-    if (sort == 2) {
-        return todoHTML_low + todoHTML_medium + todoHTML_high;
-    }
-
-
+function grabData(){
 
 }
 
@@ -181,11 +165,11 @@ function hideErrors() {
 
 
 
-function addTodo(a, b, c) {
+function addTodo() {
     if (!input_title || !input_content || !input_priority) {
         errors = 'Something is missing....';
     } else {
-
+        
         let date = new Date();
         db.ref('todos/' + keyGen()).set({
             id: genId(),
@@ -198,42 +182,11 @@ function addTodo(a, b, c) {
             completed: false,
         }, (error) => {
         if (error) {
-            console.log('Failed')
+            errors = 'Something went wrong... ' + error;
         } else {
             console.log('Success')
         }});
     }
-
-    // if (a && b && c) {
-        // todos[keyGen()] = {
-        //     id: genId(),
-        //     date_added: date.toUTCString(),
-        //     date_edited: '',
-        //     date_finished: '',
-        //     title: a,
-        //     content: b,
-        //     priority: c,
-        //     completed: false,
-        // };
-    //     updateScreen();
-    // } else {
-    //     if (!input_title || !input_content || !input_priority) {
-    //         errors = 'Something is missing....';
-    //     } else {
-    //         errors = '';
-    //         let date = new Date();
-    //         todos[keyGen()] = {
-    //             id: genId(),
-    //             date_added: date.toUTCString(),
-    //             date_edited: '',
-    //             date_finished: '',
-    //             title: input_title,
-    //             content: input_content,
-    //             priority: input_priority,
-    //             completed: false,
-    //         };
-    //     }
-    // }
 
 
     input_title = '';
@@ -241,12 +194,10 @@ function addTodo(a, b, c) {
     input_priority = '';
 
     updateScreen();
+
 }
 
 function editTodo(id) {
-
-    console.log(id);
-
     let date = new Date();
 
     selectedToEdit = id;
@@ -287,7 +238,7 @@ function completeTodo(id) {
 }
 
 function removeTodo(id) {
-    delete todos[id];
+    db.ref('todos/' + id).remove();
     updateScreen();
 }
 
@@ -306,10 +257,5 @@ function checkId(a) {
 
 function genId() {
     let new_id = Math.floor(Math.random() * Math.floor(Math.random() * Date.now()));
-    return (checkId(new_id) === false ? new_id : Math.floor(Math.random() * Math.floor(Math.random() * Date.now())) && console.log('winner'));
+    return (checkId(new_id) === false ? new_id : Math.floor(Math.random() * Math.floor(Math.random() * Date.now())));
 }
-
-function writeUserData(userId, name, email, imageUrl) {
-
-  }
-  
