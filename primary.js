@@ -6,9 +6,6 @@ function updateScreen() {
     todoHTML = '';
     todos = [];
 
-    if(sorting === 1) {todos.reverse()}
-    if(sorting === 2) {todos.reverse()}
-
     if (filter === 0) {
         data.orderByChild("priority").on("child_added", snapshot => {
 
@@ -67,9 +64,9 @@ function filterTodos(a) {
 }
 
 function sortTodos(a) {
-    mode = '';
-    filter = '';
-    sorting = a.value;
+    // mode = '';
+    // filter = '';
+    // sorting = a.value;
     
     updateScreen();
 }
