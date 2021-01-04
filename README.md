@@ -1,1 +1,4 @@
-# dontknowyet
+# todo app
+
+###### planned functions
+- 
