@@ -10,6 +10,37 @@
     <div id="container">
 
     </div>
-    <script src="primary.js"></script>
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+    <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyDLKY35K5zzIf65TRUuDasSM4yaTpdrQ-4",
+            authDomain: "slockertsen-todo.firebaseapp.com",
+            databaseURL: "https://slockertsen-todo-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "slockertsen-todo",
+            storageBucket: "slockertsen-todo.appspot.com",
+            messagingSenderId: "453488839012",
+            appId: "1:453488839012:web:566b3e350e6ccdde501271",
+            measurementId: "G-RX9S9W1YRK"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    </script>
+    <script async src="Model.js"></script>
+    <script async src="View.js"></script>
+    <script async src="Controller.js"></script>
+    <script async src="Misc.js"></script>
+    <script async src="primary.js"></script>
 </body>
 </html>
