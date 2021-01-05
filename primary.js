@@ -1,23 +1,27 @@
-updateScreen();
+ updateScreen();
 
 function updateScreen() {
     // high to low
 
-    if (filter === 0) {
+    todoHTML = '';
 
+    if (filter === 0) {
+        
         data.orderByChild("priority").on("child_added", snapshot => {
 
-            let to = snapshot.val()
+            todos = [];
 
-            let to_key = snapshot.key;
+            let s_val = snapshot.val();
 
-            todos.push(todoCreateHTML(to, to_key));     
+            let s_key = snapshot.key;
+    
+            todos.push(todoCreateHTML(s_val, s_key));  
 
-            // for(let x = 0; x < todos.length; x++) {
-            //     console.log(x);
-            //     todoHTML += todos[x];
+            for(let x = 0; x < todos.length; x++) {
+                console.log(x);
+                todoHTML += todos[x];
 
-            // }   
+            }   
                 mainScreen();
 
 
@@ -26,20 +30,21 @@ function updateScreen() {
             
     }
     if(filter === 1 || filter === 2 || filter === 3) {
-
         data.orderByChild("priority").equalTo(filter).on("child_added", snapshot => {
             
-            let to = snapshot.val()
+            todos = [];
 
-            let to_key = snapshot.key;
+            let s_val = snapshot.val();
+
+            let s_key = snapshot.key;
     
-            todos.push(todoCreateHTML(to, to_key));
+            todos.push(todoCreateHTML(s_val, s_key));
 
-            // for(let x = 0; x < todos.length; x++) {
+            for(let x = 0; x < todos.length; x++) {
 
-            //     todoHTML += todos[x];
+                todoHTML += todos[x];
 
-            // }
+            }
             
             mainScreen();
 

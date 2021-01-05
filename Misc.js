@@ -16,3 +16,4 @@ function genId() {
     // return (checkId(new_id) === false ? new_id : Math.floor(Math.random() * Math.floor(Math.random() * Date.now())));
     return new_id;
 }
+
