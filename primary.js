@@ -7,7 +7,7 @@ function updateScreen() {
 
     if (filter === 0) {
         
-        data.orderByChild("priority").on("child_added", snapshot => {
+        db.ref('todos/').orderByChild("priority").on("child_added", snapshot => {
 
             todos = [];
 
@@ -30,7 +30,7 @@ function updateScreen() {
             
     }
     if(filter === 1 || filter === 2 || filter === 3) {
-        data.orderByChild("priority").equalTo(filter).on("child_added", snapshot => {
+        db.ref('todos/').orderByChild("priority").equalTo(filter).on("child_added", snapshot => {
             
             todos = [];
 

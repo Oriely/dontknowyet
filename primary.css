@@ -27,6 +27,25 @@ body {
     background:rgba(0, 0, 0, 0.933);
 }
 
+button {
+
+    outline:none;
+    border:none;
+    transition:0.2s ease;
+    background:rgba(0, 0, 0, 0.481);
+    color:white;
+}
+
+button:hover {
+    background:rgba(0, 0, 0, 0.289);
+}
+
+input { display:inline-block; }
+
+
+
+
+
 #container {
     font-family: 'Roboto Mono', monospace;
     display: flex;
@@ -35,16 +54,14 @@ body {
 
 }
 
-.todos {
-    display:grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap:5px;
-}
-
 .wrapper {
     width:100%;
     padding:10px;
 }
+
+
+
+
 
 .input-form input {
     padding: 10px;
@@ -61,6 +78,7 @@ body {
 
 .input-form label {
     display:inline-block;
+    padding:10px;
 
 }
 
@@ -71,38 +89,15 @@ body {
 .input-title input {
     width:100%;
 }
-.todo-wrapper {
-    padding:5px 5px 0 5px;;
-    border-radius:5px;
-    display:flex;
-    color:white;
-    flex-direction:column;
-}
 
-.todo-wrapper > div {
-    background:rgba(0, 0, 0, 0.481);
-    height:100%;
-}
 
-.todo-title {
-    font-size:13px;
-    padding: 5px;
-}
 
-.todo-dates {
-    display: flex;
-    flex-direction:column;
-    font-weight: bold;
-    font-size: 11px;
-    padding: 5px;
-    border-top:1px solid rgba(0, 0, 0, 0.213);
-    border-bottom:1px solid rgba(0, 0, 0, 0.213);
-}
 
-.todo-content {
-    font-size:12px;
-    padding: 10px 5px 0 5px;
-}
+
+
+
+
+
 
 .spacer {
     width:100%;
@@ -110,6 +105,7 @@ body {
     border:1px solid rgba(0, 0, 0, 0.097);
     margin:5px;
 }
+
 
 .errors {
     margin-top: 5px;
@@ -128,6 +124,7 @@ body {
     color:white;
 }
 
+
 .todo-controls {
     padding-top:10px;
     padding-bottom:10px;
@@ -135,9 +132,17 @@ body {
     justify-content: space-between;
 }
 
+
 .priority {
     padding-left:10px;
 }
+
+
+.priority div {
+    background:rgba(0, 0, 0, 0.296);
+    padding:10px;
+}
+
 
 input[type=radio]:not(old){
     width: 28px;
@@ -185,25 +190,56 @@ input[type=radio]:not(old){
     margin-left:10px;
 }
 
-.todo-controls-edit {
-    
+
+.pri {
+text-align:right;
+}
+
+
+.todos {
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap:5px;
+}
+
+
+.todo-wrapper {
+    padding:5px 5px 0 5px;
+    border-radius:5px;
     display:flex;
-    flex-direction:row;
-    width:100%;
-    padding-top:10px;
-    justify-content: ;
-    align-content:flex-end;
+    color:white;
+    flex-direction:column;
 }
 
-.todo-controls-edit button {
-    width:100%;
-    padding:2px 0 2px 0;
-    border-radius:0;
+
+.todo-wrapper > div {
+    background:rgba(0, 0, 0, 0.515);
 }
 
-.todo-controls-edit button:disabled {
-    background:rgba(0, 0, 0, 0.296);
+
+.todo-title {
+    font-size:13px;
+    padding:5px;
 }
+
+
+.todo-dates {
+    display: flex;
+    flex-direction:column;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 5px;
+    border-top:1px solid rgba(0, 0, 0, 0.213);
+    border-bottom:1px solid rgba(0, 0, 0, 0.213);
+}
+
+
+.todo-content {
+    font-size:12px;
+    padding: 10px 5px 0 5px;
+    height:100%;
+}
+
 
 .todo-wrapper input {
     width:100%;
@@ -228,21 +264,29 @@ input[type=radio]:not(old){
     background-color: rgba(255, 0, 0, 0.535);
 }
 
-button {
-    padding: 10px;
-    outline:none;
-    border:none;
+
+.todo-controls-edit {
+    align-self:flex-end;
+    justify-self: flex-end;
+    display:flex;
+    flex-direction:row;
+    width:100%; 
+}
+.todo-controls-edit button {
+    width:100%;  
+    padding:3px;
+}
+
+.todo-controls-edit button:disabled {
+    background:rgba(0, 0, 0, 0.296);
+}
+
+.input-form button {
     border-radius:2px;
-    transition:0.2s ease;
-    background:rgba(0, 0, 0, 0.481);
-    color:white;
+    padding: 10px;
 }
 
-button:hover {
-    background:rgba(0, 0, 0, 0.289);
-}
 
-input { display:inline-block; }
 
 @keyframes slideIn {
     0% {
@@ -260,6 +304,6 @@ input { display:inline-block; }
     }
     .todos {
         grid-template-columns: 1fr;
-        g
+        
     }
   }

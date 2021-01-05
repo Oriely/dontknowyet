@@ -60,7 +60,7 @@ function todoCreateHTML(data, id) {
         <div class="todo-content">  
             ${(mode == 'edit' && id == selectedToEdit ? '<textarea class="edit" onkeyup="input_content_edit = this.value">'+ data.content + '</textarea>' : data.content)}
             <br>
-            Priority: ${data.priority}
+            <div class="pri">PRI: ${data.priority}</div>
         </div>
         <div class="todo-controls-edit">
             ${(data.completed == true ? '' : '<button '+ (id != selectedToEdit && mode == 'edit' ? 'disabled ' : '') + 'onclick="editTodo(\''+id+'\')">' + (id == selectedToEdit ? (mode == 'edit' ? 'Save' : 'Edit') : 'Edit') + '</button>')}
@@ -85,6 +85,10 @@ function setPriority(pri) {
 
 
 
-function showErrors() {
+function e() {
     return '<div class="errors"><p>' + errors + '<p><span>X</span></div>';
+}
+
+function showEditControls(){
+
 }

@@ -1,7 +1,6 @@
 //server
 let db = firebase.database();
 let db_ref = db.ref();
-let data = db_ref.child('todos');
 
 
 
@@ -21,3 +20,4 @@ let input_content_edit = '';
 let priority = [1, 2, 3];
 let filter = 0;
 let sorting = 1;
+

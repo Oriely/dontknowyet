@@ -17,3 +17,8 @@ function genId() {
     return new_id;
 }
 
+function getValueOf(key, p) {
+    firebase.database().ref('todos/' + key).once('value').then((snapshot) => {
+        return snapshot.val()[p];
+    });
+}

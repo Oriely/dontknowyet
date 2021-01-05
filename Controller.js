@@ -38,15 +38,19 @@ function editTodo(id) {
     selectedToEdit = id;
 
     if (input_title_edit == '' && input_content_edit == '') {
-        input_title_edit = todos[id].title;
-        input_content_edit = todos[id].content;
+        input_title_edit = getValueOf(id, 'title');
+        input_content_edit = getValue(id, 'title');
     }
 
     if (mode == 'edit' && id == selectedToEdit) {
 
-        todos[id].date_edited = date.toUTCString();
-        todos[id].title = input_title_edit;
-        todos[id].content = input_content_edit;
+        // todos[id].date_edited = date.toUTCString();
+        // todos[id].title = input_title_edit;
+        // todos[id].content = input_content_edit;
+
+        db.ref('todos/').child(id).update({'date_edited': date.toUTCString()})
+        db.ref('todos/').child(id).update({'title': input_title_edit})
+        db.ref('todos/').child(id).update({'content': input_content_edit})
 
         selectedToEdit = '';
         input_title_edit = '';
@@ -65,10 +69,14 @@ function editTodo(id) {
 function completeTodo(id) {
     mode = '';
     selectedToEdit = '';
-    let date = new Date();
-    todos[id].date_finished = date.toUTCString();
-    todos[id].completed = true;
+    let completed = getValueOf(id, 'completed');
+    
 
+    if (completed === false) {
+        let date = new Date();
+        db.ref('todos/').child(id).update({'date_finished': date.toUTCString()})
+        db.ref('todos/').child(id).update({'completed': true})
+    } else {console.log(completed);}
     updateScreen();
 }
 
@@ -81,3 +89,4 @@ function removeTodo(id) {
     }});
     updateScreen();
 }
+
