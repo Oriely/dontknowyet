@@ -190,6 +190,14 @@ input[type=radio]:not(old){
     margin-left:10px;
 }
 
+.panes {
+    margin-left:10px;
+}
+
+.panes svg {
+    margin:0;
+    padding:0;
+}
 
 .pri {
 text-align:right;

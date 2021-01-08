@@ -2,6 +2,31 @@
 let db = firebase.database();
 let db_ref = db.ref();
 
+let model = {
+    app: {    
+        on_page: 'screen_list'
+    },
+    inputs: {
+        new: {
+            input_title: '',
+            input_priority: '',
+            input_content: '',
+        },
+        edit: {
+            input_edit_title: '',
+            input_edit_priority: '',
+            input_edit_content: '',
+        }
+    }
+}
+
+
+
+
+
+
+
+
 
 
 // local
@@ -20,4 +45,9 @@ let input_content_edit = '';
 let priority = [1, 2, 3];
 let filter = 0;
 let sorting = 1;
+
+
+
+
+
 

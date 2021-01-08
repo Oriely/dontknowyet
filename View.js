@@ -1,4 +1,58 @@
-function mainScreen() {
+function screenList() {
+
+
+    container.innerHTML = `
+    <div class="wrapper">
+        <div class="input-form">
+            <div class="input-title"><input id="" type="text" onkeyup="input_title = this.value" placeholder="Some title...."></div>
+            <div class="input-content"><textarea onkeyup="input_content = this.value"></textarea></div>
+            ${(errors ? showErrors() : '')}
+            <div class="todo-controls">
+
+                <div>
+                    <div><button onclick="addTodo()">Add todo</button></div>
+                    <div class="priority">
+                        <div><label>Priority: </label></div>
+                        <div><input class="priority" onclick="input_priority = 1" id="high" type="radio" name="priority" value="test" ><label for="high">High</label></div>
+                        <div><input class="priority" onclick="input_priority = 2" id="medium" type="radio"  name="priority"value="test"><label for="medium">Medium</label></div>
+                        <div><input class="priority" onclick="input_priority = 3" id="low" type="radio" name="priority" value="test"><label for="low">Low</label></div>
+                    </div>
+                </div>
+                <div class="controls">
+                    <div class="todo-filter">
+                        <label>Filter by</label>
+                        <select name="cars" id="cars" onchange="filterTodos(this)">
+                            <option ${(filter == 0 ? 'selected' + ' ': '')}value="0">Nothing</option>
+                            <option ${(filter == 1 ? 'selected' + ' ': '')}value="1">High</option>
+                            <option ${(filter == 2 ? 'selected' + ' ': '')}value="2">Medium</option>
+                            <option ${(filter == 3 ? 'selected' + ' ': '')}value="3">Low</option>
+                        </select>
+                    </div>
+                    <div class="todo-sort">
+                        <label>Sort by</label>
+                        <select name="cars" id="cars" onchange="sortTodos(this)">
+                            <option ${(sorting == 1 ? 'selected' + ' ': '')}value="1">High > Low</option>
+                            <option ${(sorting == 2 ? 'selected' + ' ': '')}value="2">Low > High</option>
+                        </select>
+                    </div>
+                    <div><button class="panes" onclick="changeScreen('screen_panes')"><i class="fas fa-columns"></i></button></div>
+                    
+                </div>
+            </div>
+            
+            
+        </div>
+       
+        <div class="todos">
+            ${todoHTML}
+            
+        </div>
+    </div>
+    `;
+}
+
+function screenPanes() {
+
 
     container.innerHTML = `
     <div class="wrapper">
@@ -18,22 +72,7 @@ function mainScreen() {
                     </div>
                 </div>
                 <div>
-                <div class="todo-filter">
-                    <label>Filter by</label>
-                    <select name="cars" id="cars" onchange="filterTodos(this)">
-                        <option ${(filter == 0 ? 'selected' + ' ': '')}value="0">Nothing</option>
-                        <option ${(filter == 1 ? 'selected' + ' ': '')}value="1">High</option>
-                        <option ${(filter == 2 ? 'selected' + ' ': '')}value="2">Medium</option>
-                        <option ${(filter == 3 ? 'selected' + ' ': '')}value="3">Low</option>
-                    </select>
-                </div>
-                <div class="todo-sort">
-                    <label>Sort by</label>
-                    <select name="cars" id="cars" onchange="sortTodos(this)">
-                        <option ${(sorting == 1 ? 'selected' + ' ': '')}value="1">High > Low</option>
-                        <option ${(sorting == 2 ? 'selected' + ' ': '')}value="2">Low > High</option>
-                    </select>
-                </div>
+                    <button><i class="fas fa-columns"></i></button>
                 </div>
             </div>
             

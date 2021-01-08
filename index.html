@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
     <link rel="stylesheet" href="primary.css">
+    
 </head>
 <body>
     <div id="container">
 
-    </div>
+    </div>  
     <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
 
     <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
@@ -37,10 +39,74 @@
         firebase.initializeApp(firebaseConfig);
         firebase.analytics();
     </script>
-    <script async src="Model.js"></script>
-    <script async src="View.js"></script>
-    <script async src="Controller.js"></script>
-    <script async src="Misc.js"></script>
-    <script async src="primary.js"></script>
+    <script>
+        
+    </script>
+    <script src="Model.js"></script>
+    <script src="primary.js"></script>
+    <script src="View.js"></script>
+    <script src="Controller.js"></script>
+    <script src="Misc.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" integrity="sha512-F5QTlBqZlvuBEs9LQPqc1iZv2UMxcVXezbHzomzS6Df4MZMClge/8+gXrKw2fl5ysdk4rWjR0vKS7NNkfymaBQ==" crossorigin="anonymous"></script>
+    <script>
+
+    function updateScreen() {
+        // high to low
+
+        todoHTML = '';
+
+        if (filter === 0) {
+            
+            db.ref('todos/').orderByChild("priority").on("child_added", snapshot => {
+
+                todos = [];
+
+                let s_val = snapshot.val();
+
+                let s_key = snapshot.key;
+        
+                todos.push(todoCreateHTML(s_val, s_key));  
+
+                for(let x = 0; x < todos.length; x++) {
+
+                    todoHTML += todos[x];
+
+                }   
+
+            });
+        }
+        if(filter === 1 || filter === 2 || filter === 3) {
+            db.ref('todos/').orderByChild("priority").equalTo(filter).on("child_added", snapshot => {
+                
+                todos = [];
+
+                let s_val = snapshot.val();
+
+                let s_key = snapshot.key;
+
+                todos.push(todoCreateHTML(s_val, s_key));
+
+                for(let x = 0; x < todos.length; x++) {
+
+                    todoHTML += todos[x];
+
+                }
+
+            });
+            
+        }
+        
+        if(model.app.on_page === 'screen_list') {
+            screenList();
+        }
+        if(model.app.on_page === 'screen_panes') {
+            screenPanes();
+        }
+        if(!model.app.on_page) {
+            screenList();
+        }
+    }
+    updateScreen();     
+    </script>
 </body>
 </html>

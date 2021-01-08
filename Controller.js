@@ -90,3 +90,7 @@ function removeTodo(id) {
     updateScreen();
 }
 
+function changeScreen(p) {
+    model.app.on_page = p;
+    updateScreen();
+}
