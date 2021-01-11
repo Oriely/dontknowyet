@@ -53,57 +53,37 @@
     function updateScreen() {
         // high to low
 
-        todoHTML = '';
+        todoHTML_low = '';
+        todoHTML_med = '';
+        todoHTML_high = '';
 
-        if (filter === 0) {
-            
-            db.ref('todos/').orderByChild("priority").on("child_added", snapshot => {
-
-                todos = [];
-
-                let s_val = snapshot.val();
-
-                let s_key = snapshot.key;
-        
-                todos.push(todoCreateHTML(s_val, s_key));  
-
-                for(let x = 0; x < todos.length; x++) {
-
-                    todoHTML += todos[x];
-
-                }   
-
-            });
-        }
-        if(filter === 1 || filter === 2 || filter === 3) {
-            db.ref('todos/').orderByChild("priority").equalTo(filter).on("child_added", snapshot => {
-                
-                todos = [];
-
+        db.ref('todos/').orderByChild("priority").equalTo(1).on("child_added", snapshot => {
                 let s_val = snapshot.val();
 
                 let s_key = snapshot.key;
 
-                todos.push(todoCreateHTML(s_val, s_key));
+                todoHTML_high += todoCreateHTML(s_val, s_key);
+        });
 
-                for(let x = 0; x < todos.length; x++) {
+        db.ref('todos/').orderByChild("priority").equalTo(2).on("child_added", snapshot => {
+                let s_val = snapshot.val();
 
-                    todoHTML += todos[x];
+                let s_key = snapshot.key;
 
-                }
+                todoHTML_med += todoCreateHTML(s_val, s_key);
 
-            });
-            
-        }
-        
-        if(model.app.on_page === 'screen_list') {
-            screenList();
-        }
-        if(model.app.on_page === 'screen_panes') {
-            screenPanes();
-        }
+        });
+        db.ref('todos/').orderByChild("priority").equalTo(3).on("child_added", snapshot => {
+                let s_val = snapshot.val();
+
+                let s_key = snapshot.key;
+
+                todoHTML_low += todoCreateHTML(s_val, s_key);
+        });
+
         if(!model.app.on_page) {
-            screenList();
+
+            mainScreen();
         }
     }
     updateScreen();     

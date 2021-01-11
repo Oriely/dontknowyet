@@ -4,15 +4,20 @@ let db_ref = db.ref();
 
 let model = {
     app: {    
-        on_page: 'screen_list'
+        on_page: '',
+        todo_viewmode: 'panes',
+        todo_categories: [
+            {color:red, ''}
+        ],
     },
+
     inputs: {
-        new: {
+        todo_new: {
             input_title: '',
             input_priority: '',
             input_content: '',
         },
-        edit: {
+        todo_edit: {
             input_edit_title: '',
             input_edit_priority: '',
             input_edit_content: '',
@@ -23,17 +28,19 @@ let model = {
 
 
 
-
-
-
-
-
-
 // local
 let critError;
+let error;
 let todos = [];
 let container = document.getElementById('container');
 let todoHTML = '';
+
+let todoHTML_all = '';
+let todoHTML_low = '';
+let todoHTML_med = '';
+let todoHTML_high = '';
+
+
 let input_title = '';
 let input_content = '';
 let input_priority = '';

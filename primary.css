@@ -16,15 +16,13 @@ select {
   border: none;
   padding: 0 1em 0 0;
   margin: 0;
-  width: 100%;
-  font-family: inherit;
-  font-size: inherit;
-  cursor: inherit;
-  line-height: inherit;
+  
+
 }
 
 body {
     background:rgba(0, 0, 0, 0.933);
+    
 }
 
 button {
@@ -51,7 +49,7 @@ input { display:inline-block; }
     display: flex;
     justify-content: center;
     color:white;
-
+    transform-style:preserve-3d;
 }
 
 .wrapper {
@@ -76,11 +74,6 @@ input { display:inline-block; }
     height: 150px;
 }
 
-.input-form label {
-    display:inline-block;
-    padding:10px;
-
-}
 
 .input-title {
     
@@ -89,23 +82,6 @@ input { display:inline-block; }
 .input-title input {
     width:100%;
 }
-
-
-
-
-
-
-
-
-
-
-.spacer {
-    width:100%;
-    display:block;
-    border:1px solid rgba(0, 0, 0, 0.097);
-    margin:5px;
-}
-
 
 .errors {
     margin-top: 5px;
@@ -126,75 +102,35 @@ input { display:inline-block; }
 
 
 .todo-controls {
-    padding-top:10px;
-    padding-bottom:10px;
+    font-size:12px;
     display:flex;
     justify-content: space-between;
+    padding-top:10px;
+    padding-bottom:10px;
 }
-
 
 .priority {
-    padding-left:10px;
-}
-
-
-.priority div {
-    background:rgba(0, 0, 0, 0.296);
-    padding:10px;
-}
-
-
-input[type=radio]:not(old){
-    width: 28px;
-}
-
-.priority div {
-    padding-left:5px
-}
-
-.todo-controls div {
-    font-size:10px;
-    flex-direction: row;
     display:flex;
-    align-content:center;
-    justify-content: center;
-    align-items: center;
 }
 
-.todo-sort {
-    justify-self: baseline;
-}
-.input-form select {
-    margin-left:10px;
-    padding:5px;
-    outline:none;
-    border:none;
+.priority > div {
+    padding-left:5px;
+    display:flex;
+    align-items:center;
+    
 }
 
-.input-form select:after {
-    position: absolute;
-    content: "";
-    top: 14px;
-    right: 10px;
-    width: 0;
-    height: 0;
-    border: 6px solid transparent;
-    border-color: #fff transparent transparent transparent;
+.todo-controls > div {
+        display:flex;
 }
 
-.todo-filter {
-    justify-self: baseline;
-}
 
-.todo-filter select {
+
+.switch {
     margin-left:10px;
 }
 
-.panes {
-    margin-left:10px;
-}
-
-.panes svg {
+.switch svg {
     margin:0;
     padding:0;
 }
@@ -203,8 +139,32 @@ input[type=radio]:not(old){
 text-align:right;
 }
 
+.todo-panes {
+    display:flex;
+    flex-direction:row;
+    gap:5px;
+}
 
-.todos {
+.todo-panes section {
+    display:flex;
+    flex-direction:column;
+    width:100%; 
+    
+}
+
+.todo-panes section:nth-child(2) {
+
+}
+
+.divider {
+    border-left:1px solid gray;
+}
+
+.todo-panes section > div {
+    margin-bottom: 5px;
+}
+
+.todo-list {
     display:grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap:5px;
@@ -260,19 +220,6 @@ text-align:right;
     padding: 10px;
 }
 
-.high-priority {
-    background-color: red;
-}
-
-.medium-priority {
-    background-color: rgba(255, 0, 0, 0.789);
-}
-
-.low-priority {
-    background-color: rgba(255, 0, 0, 0.535);
-}
-
-
 .todo-controls-edit {
     align-self:flex-end;
     justify-self: flex-end;
@@ -289,6 +236,10 @@ text-align:right;
     background:rgba(0, 0, 0, 0.296);
 }
 
+.controls {
+    
+}
+
 .input-form button {
     border-radius:2px;
     padding: 10px;
@@ -298,11 +249,11 @@ text-align:right;
 
 @keyframes slideIn {
     0% {
-        transform: translateX(-900px);
+        transform: translateY(-500px);
     }
 
     100% {
-        transform: translateX(0);
+        transform: translateY(0);
     }
 }
 
@@ -310,7 +261,7 @@ text-align:right;
     .todo-controls {
         flex-direction:column;
     }
-    .todos {
+    .todo-list {
         grid-template-columns: 1fr;
         
     }

@@ -1,7 +1,7 @@
 
 function addTodo() {
-    if (!input_title || !input_content || !input_priority) {
-        errors = 'Something is missing....';
+    if (!model.inputs.todo_new.input_title || !model.inputs.todo_new.input_content || !model.inputs.todo_new.input_priority) {
+        errorHandler(4);
     } else {
         
         let date = new Date();
@@ -16,16 +16,16 @@ function addTodo() {
             completed: false,
         }, (error) => {
         if (error) {
-            errors = 'Something went wrong... ' + error;
+            errorHandler(3);
         } else {
             console.log('Success')
         }});
     }
 
 
-    input_title = '';
-    input_content = '';
-    input_priority = '';
+    model.inputs.todo_new.input_title = '';
+    model.inputs.todo_new.input_content = '';
+    model.inputs.todo_new.input_priority = '';
 
     updateScreen();
 
@@ -83,11 +83,16 @@ function completeTodo(id) {
 function removeTodo(id) {
     db.ref('todos/' + id).set(null, (error) => {
     if (error) {
-        errors = 'Something went wrong... ' + error;
+       errorHandler(3);
     } else {
         console.log('Success')
     }});
     updateScreen();
+}
+
+function changeViewmode(p) {
+    model.app.todo_viewmode = p;
+    updateScreen() 
 }
 
 function changeScreen(p) {
