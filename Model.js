@@ -3,25 +3,36 @@ let db = firebase.database();
 let db_ref = db.ref();
 
 let model = {
-    app: {    
+    app: {
         on_page: '',
         todo_viewmode: 'panes',
         todo_categories: [
-            {color:red, ''}
+            { name: 'personal', color: 'red' },
+            { name: 'work', color: '#CCC' },
+            { name: 'testin', color: 'blue' },
+            { name: 'help', color: 'yellow' },
+            { name: 'kkok', color: 'brown' }
         ],
+        edit_mode: false,
+
     },
 
     inputs: {
         todo_new: {
-            input_title: '',
-            input_priority: '',
-            input_content: '',
+            title: '',
+            category: '',
+            content: '',
         },
         todo_edit: {
-            input_edit_title: '',
-            input_edit_priority: '',
-            input_edit_content: '',
+            title: '',
+            category: '',
+            content: '',
         }
+    },
+    tmpHTML: {
+        
+        todo_low: '',
+
     }
 }
 

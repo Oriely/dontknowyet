@@ -1,6 +1,6 @@
 
 function addTodo() {
-    if (!model.inputs.todo_new.input_title || !model.inputs.todo_new.input_content || !model.inputs.todo_new.input_priority) {
+    if (!model.inputs.todo_new.title || !model.inputs.todo_new.content || !model.inputs.todo_new.category) {
         errorHandler(4);
     } else {
         
@@ -10,22 +10,24 @@ function addTodo() {
             date_added: date.toUTCString(),
             date_edited: '',
             date_finished: '',
-            title: input_title,
-            content: input_content,
-            priority: input_priority,
+            title: model.inputs.todo_new.title,
+            content: model.inputs.todo_new.content,
+            category: model.inputs.todo_new.category,
             completed: false,
         }, (error) => {
         if (error) {
             errorHandler(3);
         } else {
+            error = '';
             console.log('Success')
+            
+    model.inputs.todo_new.title = '';
+    model.inputs.todo_new.content = '';
+    model.inputs.todo_new.category = '';
         }});
     }
 
 
-    model.inputs.todo_new.input_title = '';
-    model.inputs.todo_new.input_content = '';
-    model.inputs.todo_new.input_priority = '';
 
     updateScreen();
 
@@ -97,5 +99,10 @@ function changeViewmode(p) {
 
 function changeScreen(p) {
     model.app.on_page = p;
+    updateScreen();
+}
+
+function selectCategory(a, b) {
+    model.inputs.todo_new.category = model.app.todo_categories[b].name
     updateScreen();
 }

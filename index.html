@@ -52,12 +52,14 @@
 
     function updateScreen() {
         // high to low
-
+        let tod = [];
         todoHTML_low = '';
         todoHTML_med = '';
         todoHTML_high = '';
 
-        db.ref('todos/').orderByChild("priority").equalTo(1).on("child_added", snapshot => {
+        for (let i = 0; i < model.app.todo_categories.length; i++) {
+            
+        db.ref('todos/').orderByChild("priority").equalTo(model.app.todo_categories[i].name).on("child_added", snapshot => {
                 let s_val = snapshot.val();
 
                 let s_key = snapshot.key;
@@ -65,25 +67,35 @@
                 todoHTML_high += todoCreateHTML(s_val, s_key);
         });
 
-        db.ref('todos/').orderByChild("priority").equalTo(2).on("child_added", snapshot => {
-                let s_val = snapshot.val();
+        }
 
-                let s_key = snapshot.key;
+        // db.ref('todos/').orderByChild("priority").equalTo(1).on("child_added", snapshot => {
+        //         let s_val = snapshot.val();
 
-                todoHTML_med += todoCreateHTML(s_val, s_key);
+        //         let s_key = snapshot.key;
 
-        });
-        db.ref('todos/').orderByChild("priority").equalTo(3).on("child_added", snapshot => {
-                let s_val = snapshot.val();
+        //         todoHTML_high += todoCreateHTML(s_val, s_key);
+        // });
 
-                let s_key = snapshot.key;
+        // db.ref('todos/').orderByChild("priority").equalTo(2).on("child_added", snapshot => {
+        //         let s_val = snapshot.val();
 
-                todoHTML_low += todoCreateHTML(s_val, s_key);
-        });
+        //         let s_key = snapshot.key;
 
+        //         todoHTML_med += todoCreateHTML(s_val, s_key);
+
+        // });
+        // db.ref('todos/').orderByChild("priority").equalTo(3).on("child_added", snapshot => {
+        //         let s_val = snapshot.val();
+
+        //         let s_key = snapshot.key;
+
+        //         todoHTML_low += todoCreateHTML(s_val, s_key);
+        // });
+    
         if(!model.app.on_page) {
-
             mainScreen();
+
         }
     }
     updateScreen();     
