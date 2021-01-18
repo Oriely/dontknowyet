@@ -13,9 +13,18 @@ Site where i can add todos by category and list them to see.
 
 
 ##### admin/config page
-- add new categories and new color
+- add new categories with a color
 - edit existing categories and color
 - remove categories
+- more to add...
+
+
+##### Stats/history page
+- show list of all finished todos 
+- Show total finished & total unfinished todos in a table/list
+- maybe some graphs of some kind??
+
+
 
 ### wireframes
 
