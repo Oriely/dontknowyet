@@ -17,3 +17,11 @@ Site where i can add todos by category and list them to see.
 - edit existing categories and color
 - remove categories
 
+### wireframes
+
+##### main page
+![Alt text](wireframes/main.png)
+##### config
+![Alt text](wireframes/config.png)
+##### stats
+![Alt text](wireframes/stats.png)
