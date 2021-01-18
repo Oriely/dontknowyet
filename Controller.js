@@ -2,6 +2,10 @@
 function addTodo() {
     if (!model.inputs.todo_new.title || !model.inputs.todo_new.content || !model.inputs.todo_new.category) {
         errorHandler(4);
+        setTimeout(function () {
+            hideErrors();
+
+        }, 3000);
     } else {
         
         let date = new Date();
@@ -20,10 +24,9 @@ function addTodo() {
         } else {
             error = '';
             console.log('Success')
-            
-    model.inputs.todo_new.title = '';
-    model.inputs.todo_new.content = '';
-    model.inputs.todo_new.category = '';
+            model.inputs.todo_new.title = '';
+            model.inputs.todo_new.content = '';
+            model.inputs.todo_new.category = '';
         }});
     }
 
@@ -51,8 +54,8 @@ function editTodo(id) {
         // todos[id].content = input_content_edit;
 
         db.ref('todos/').child(id).update({'date_edited': date.toUTCString()})
-        db.ref('todos/').child(id).update({'title': input_title_edit})
-        db.ref('todos/').child(id).update({'content': input_content_edit})
+        db.ref('todos/').child(id).update({'title': model.inputs.todo_edit.title})
+        db.ref('todos/').child(id).update({'content': model.inputs.todo_edit.content})
 
         selectedToEdit = '';
         input_title_edit = '';

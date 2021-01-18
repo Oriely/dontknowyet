@@ -10,10 +10,12 @@ let model = {
             { name: 'personal', color: 'red' },
             { name: 'work', color: '#CCC' },
             { name: 'testin', color: 'blue' },
-            { name: 'help', color: 'yellow' },
-            { name: 'kkok', color: 'brown' }
+            { name: 'testiwn', color: 'purple' },
+            { name: 'tein', color: 'green' },
+            { name: 'testieqn', color: 'white' },
         ],
         edit_mode: false,
+        mobile: false,
 
     },
 
@@ -30,8 +32,9 @@ let model = {
         }
     },
     tmpHTML: {
-        
-        todo_low: '',
+        todos:[
+            
+        ],
 
     }
 }

@@ -2,6 +2,8 @@
 
 window.onbeforeunload = function() { };
 let tmpCat = '';
+
+
 function mainScreen() {
     tmpCat = '';
     
@@ -15,6 +17,17 @@ function mainScreen() {
 
     container.innerHTML = `
     <div class="wrapper">
+        <nav>
+            <div class="navigation">
+                <ul>
+                    <li><a onclick="changeScreen('main')">Main</a></li>
+                    <li><a onclick="changeScreen('configuration')">Configuration</a></li>
+                </ul>
+            </div>
+            <div><button ${(model.app.mobile === true ? 'disabled' : '')} class="switch" onclick="changeViewmode('${(model.app.todo_viewmode === 'panes' ? 'list' : 'panes')}')">${(model.app.todo_viewmode === 'panes' ? '<i class="fas fa-stream"></i>' : '<i class="fas fa-columns"></i>')}</button></div>
+
+        </nav>
+    
         <div class="input-form">
             <div class="input-title"><input id="" type="text" onkeyup="model.inputs.todo_new.title = this.value" value="${model.inputs.todo_new.title}" placeholder="Some title...."></div>
             <div class="input-content"><textarea onkeyup="model.inputs.todo_new.content = this.value" value="">${model.inputs.todo_new.content}</textarea></div>
@@ -47,7 +60,6 @@ function mainScreen() {
                     
                     
                 ` : '')}
-                <div><button class="switch" onclick="changeViewmode('${(model.app.todo_viewmode === 'panes' ? 'list' : 'panes')}')">${(model.app.todo_viewmode === 'panes' ? '<i class="fas fa-stream"></i>' : '<i class="fas fa-columns"></i>')}</button></div>
                 </div>
             </div>
             
@@ -62,28 +74,31 @@ function mainScreen() {
     `;
 }
 
-
+function configScreen() {
+    container.innerHTML = `
+    <div class="wrapper">
+        <nav>
+            <div class="navigation">
+                <ul>
+                    <li><a onclick="changeScreen('main')">Main</a></li>
+                    <li><a onclick="changeScreen('configuration')">Configuration</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    `;
+}
 
 function categoryCreate(e) {
     return'<div onclick="selectCategory(this, \'' + e + '\')" class="category-item" ><span class="color-preview ' + (model.inputs.todo_new.category == model.app.todo_categories[e].name ? 'selected-category' : '') + '" style="background-color: '+ model.app.todo_categories[e].color + '"></span><p>'+ model.app.todo_categories[e].name +'</p></div>';
 }
 
-function todosPanes() {
-    return `<section>
-
-    // todoHTML = `
-    //     <section>
-    //     ${todoHTML_high}
-    //     </section>
-    //     <div class="divider"></div>
-    //     <section>
-    //     ${todoHTML_med}
-    //     </section>
-    //     <div class="divider"></div>
-    //     <section>
-    //     ${todoHTML_low}
-    //     </section>
-    // `;
+function todosPanes(todo) {
+    return `
+        <section>
+            ${todo}
+        </section>
+    `;
 }
 
 function todosList() {
@@ -102,7 +117,7 @@ function todoCreateHTML(data, id) {
         <div class="todo-content">  
             ${(mode == 'edit' && id == selectedToEdit ? '<textarea class="edit" onkeyup="model.inputs.todo_edit.content = this.value">'+ data.content + '</textarea>' : data.content)}
             <br>
-            <div class="pri">PRI: ${data.priority}</div>
+            <div class="pri">PRI: ${data.category}</div>
         </div>
         <div class="todo-controls-edit">
             ${(data.completed == true ? '' : '<button '+ (id != selectedToEdit && model.app.edit_mode === true ? 'disabled ' : '') + 'onclick="editTodo(\''+ id +'\')">' + (id == selectedToEdit ? (model.app.edit_mode === true ? 'Save' : 'Edit') : 'Edit') + '</button>')}

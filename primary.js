@@ -22,17 +22,10 @@ function filterTodos(a) {
     updateScreen();
 }
 
-function sortTodos(a) {
-    // mode = '';
-    // filter = '';
-    // sorting = a.value;
-    
-    updateScreen();
-}
 
 
 
 function hideErrors() {
-    errors = '';
+    error = '';
     updateScreen();
 }

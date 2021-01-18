@@ -31,7 +31,7 @@ select::after {
 }
 
 body {
-    background:rgba(0, 0, 0, 0.933);
+    background:rgba(51, 51, 51, 0.933);
     
 }
 
@@ -67,6 +67,28 @@ input { display:inline-block; }
     padding:10px;
 }
 
+nav {
+    padding-bottom:10px;
+    display:flex;
+    justify-content: space-between;
+    font-size:10px;
+}
+
+nav ul {
+    list-style: none;
+    display:flex;
+}
+
+nav ul li {
+    padding-right:10px;
+}
+
+nav ul li a {
+    padding:10px;
+    display:block;
+    background:rgba(140, 140, 140, 0.385);
+    
+}
 
 
 
@@ -147,6 +169,7 @@ input { display:inline-block; }
 
 
 
+
 .switch {
     margin-left:10px;
 }
@@ -169,8 +192,7 @@ text-align:right;
 .todo-panes section {
     display:flex;
     flex-direction:column;
-    width:100%; 
-    
+    width:100%;
 }
 
 .todo-panes section:nth-child(2) {
@@ -179,6 +201,10 @@ text-align:right;
 
 .divider {
     border-left:1px solid gray;
+}
+
+.todo-panes section > div {
+    margin-bottom: 5px;
 }
 
 .todo-panes section > div {
@@ -264,13 +290,14 @@ text-align:right;
 button {
     border-radius:2px;
     padding: 10px;
+    font-size:10px;
 }
 
 .errorback {
     
     position:absolute;
     z-index: 1100;
-    animation: slideInError 0.5;
+    animation: slideInError 0.5s;
 }
 
 .category-item{
@@ -299,7 +326,7 @@ button {
 
 
 .selected-category {
-    border:3px solid rgba(0, 0, 0, 0.809);
+    opacity:0.3;
     transition:1s ease;
 }
 @keyframes slideInError {
@@ -322,12 +349,30 @@ button {
     }
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 700px) {
+    .todo-controls-left button {
+        width:100%;
+    }
+    .todo-controls-left {
+        flex-direction: column-reverse;
+    }
+
+    .categories {
+        flex-direction:row;
+        padding-bottom:10px;
+    }
+    .categories > div {
+        margin: 0 0 0 3px;
+    }
+
     .todo-controls {
-        flex-direction:column;
+        flex-direction:column;  
     }
     .todo-list {
         grid-template-columns: 1fr;
         
+    }
+    .switch {
+        margin:0;
     }
   }
