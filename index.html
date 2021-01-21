@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <title>dontknowyet</title>
+   
     <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
     <link rel="stylesheet" href="css/primary.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/js/all.min.js"></script>
 </head>
 <body>
     <div id="container">
@@ -20,87 +22,23 @@
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
 
     <script>
+        // Your web app's Firebase configuration
         var firebaseConfig = {
-            apiKey: "AIzaSyDLKY35K5zzIf65TRUuDasSM4yaTpdrQ-4",
-            authDomain: "slockertsen-todo.firebaseapp.com",
-            databaseURL: "https://slockertsen-todo-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "slockertsen-todo",
-            storageBucket: "slockertsen-todo.appspot.com",
-            messagingSenderId: "453488839012",
-            appId: "1:453488839012:web:566b3e350e6ccdde501271",
-            measurementId: "G-RX9S9W1YRK"
+        apiKey: "AIzaSyDRjRNpMiysgSzRIJuoJ4rkKE3HNL5cYPo",
+        authDomain: "karbonfisk-daca2.firebaseapp.com",
+        projectId: "karbonfisk-daca2",
+        storageBucket: "karbonfisk-daca2.appspot.com",
+        messagingSenderId: "295398565036",
+        appId: "1:295398565036:web:21c2081fd3c3f5f88a2b09"
         };
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        firebase.analytics();
     </script>
     
     <script src="js/Model.js"></script>
-    <script src="js/primary.js"></script>
     <script src="js/View.js"></script>
     <script src="js/Controller.js"></script>
     <script src="js/Misc.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" integrity="sha512-F5QTlBqZlvuBEs9LQPqc1iZv2UMxcVXezbHzomzS6Df4MZMClge/8+gXrKw2fl5ysdk4rWjR0vKS7NNkfymaBQ==" crossorigin="anonymous"></script>
-    <script>
-
-    if(window.innerWidth <= 700) {
-        model.app.mobile = true; 
-        model.app.todo_viewmode = 'list';
-    }
-
-    window.addEventListener('resize',function (e) {
-        
-        console.log(window.innerWidth)
-        if (window.innerWidth <= 700) {
-            model.app.mobile = true; 
-            updateScreen();
-        } else {
-            model.app.mobile = false; 
-            updateScreen();
-        }
-
-    });
-    function updateScreen() {
-        firebase.auth().onAuthStateChanged((user) => {
-
-            if (user) {
-                // User is signed in, see docs for a list of available properties
-                // https://firebase.google.com/docs/reference/js/firebase.User
-                var uid = user.uid;
-                // ...
-            } else {
-                model.app.on_page = 'login';
-                
-            }
-        });
-
-        if (!model.app.pages.includes(model.app.on_page)) {alert('something'); return}
-        
-        
-        for(let i = 0; i < model.app.todo_categories.length; i++) {
-            model.tmpHTML.todos.push(i);
-        }
-
-        if (!model.app.pages.includes(model.app.on_page)) {alert('something'); return}
-
-        if (model.app.on_page == 'configuration') {
-            configScreen();
-        }
-
-        if (model.app.on_page == 'main') {
-            mainScreen();
-        }
-        if(!model.app.on_page) {
-            mainScreen();
-
-        }
-
-
-
-        
-    }
-
-    updateScreen();     
-    </script>
+    <script src="js/primary.js"></script>
 </body>
 </html>

@@ -79,15 +79,18 @@ function mainScreen() {
     }
 
     container.innerHTML = `
-    <div class="wrapper">
+    <div class="wrapper pad">
         <nav>
             <div class="navigation">
                 <ul>
                     <li><a onclick="changeScreen('main')">Main</a></li>
-                    <li><a onclick="changeScreen('configuration')">Configuration</a></li>
+                    <li><a onclick="changeScreen('config')">Configuration</a></li>
                 </ul>
             </div>
-            <div><button ${(model.app.mobile === true ? 'disabled' : '')} class="switch" onclick="changeViewmode('${(model.app.todo_viewmode === 'panes' ? 'list' : 'panes')}')">${(model.app.todo_viewmode === 'panes' ? '<i class="fas fa-stream"></i>' : '<i class="fas fa-columns"></i>')}</button></div>
+            <div>
+                 <button ${(model.app.mobile === true ? 'disabled' : '')} class="switch" onclick="changeViewmode('${(model.app.todo_viewmode === 'panes' ? 'list' : 'panes')}')">${(model.app.todo_viewmode === 'panes' ? '<i class="fas fa-stream"></i>' : '<i class="fas fa-columns"></i>')}</button>
+                 <button onclick="signout()" title="Sign out"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
 
         </nav>
     
@@ -139,7 +142,7 @@ function mainScreen() {
 
 function configScreen() {
     container.innerHTML = `
-    <div class="wrapper">
+    <div class="wrapper pad">
         <nav>
             <div class="navigation">
                 <ul>
@@ -147,6 +150,7 @@ function configScreen() {
                     <li><a onclick="changeScreen('configuration')">Configuration</a></li>
                 </ul>
             </div>
+            <div><button onclick="signout()" title="Sign out"><i class="fas fa-sign-out-alt"></i></button></div>
         </nav>
     </div>
     `;

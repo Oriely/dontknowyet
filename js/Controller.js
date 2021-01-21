@@ -5,6 +5,9 @@ function login(e, form) {
     let email = form['login-email'].value
     let password = form['login-password'].value;
    
+    if(!email || !password) {
+        error = 'Type in email and password';
+    }
    
     if (email && password) {
         firebase.auth().signInWithEmailAndPassword(email, password)
@@ -15,6 +18,8 @@ function login(e, form) {
             .catch((error) => {
             var errorCode = error.code;
             var errorMessage = error.message;
+
+            error = errorMessage;
             });
 
     console.log(email);
@@ -25,6 +30,18 @@ function login(e, form) {
 
     }
     
+    updateScreen();
+}
+
+function signout() {
+
+    firebase.auth().signOut().then(() => {
+        updateScreen();
+    // Sign-out successful.
+    }).catch((error) => {
+        alert(error);
+    });
+
     updateScreen();
 }
 
@@ -56,32 +73,32 @@ function register(e, form) {
 function addTodo() {
     if (!model.inputs.todo_new.title || !model.inputs.todo_new.content || !model.inputs.todo_new.category) {
         errorHandler(4);
-        setTimeout(function () {
-            hideErrors();
 
-        }, 3000);
-    } else {
-        
-        let date = new Date();
-        db.ref('todos/' + keyGen()).set({
-            id: genId(),
-            date_added: date.toUTCString(),
-            date_edited: '',
-            date_finished: '',
-            title: model.inputs.todo_new.title,
-            content: model.inputs.todo_new.content,
-            category: model.inputs.todo_new.category,
-            completed: false,
-        }, (error) => {
-        if (error) {
-            errorHandler(3);
-        } else {
-            error = '';
-            console.log('Success')
-            model.inputs.todo_new.title = '';
-            model.inputs.todo_new.content = '';
-            model.inputs.todo_new.category = '';
-        }});
+    } else {    
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // Add a new document with a generated id.
+                db.collection("todos").doc(user.id).collection('ongoing').add({
+                    id: genId(),
+                    date_created: Date.now(),
+                    date_edited: '',
+                    date_finished: '',
+                    title: model.inputs.todo_new.title,
+                    content: model.inputs.todo_new.content,
+                    priority: model.inputs.todo_new.category,
+                    completed: false
+                })
+                .then(function(docRef) {
+                    console.log("Document written with ID: ", docRef.id);
+                })
+                .catch(function(err) {
+                    console.error("Error adding document: ", err);
+                    error = err;
+                });
+            
+                updateScreen();
+            }
+        });
     }
 
 
@@ -92,60 +109,47 @@ function addTodo() {
 
 
 function editTodo(id) {
-    let date = new Date();
+    firebase.auth().onAuthStateChanged((user) => {
 
-    selectedToEdit = id;
+        if (user) {
+            let date = new Date();
 
-    if (input_title_edit == '' && input_content_edit == '') {
-        input_title_edit = getValueOf(id, 'title');
-        input_content_edit = getValue(id, 'title');
-    }
+            selectedToEdit = id;
+        
+            if (input_title_edit == '' && input_content_edit == '') {
+                input_title_edit = getValueOf(id, 'title');
+                input_content_edit = getValue(id, 'title');
+            }
+        
+            if (mode == 'edit' && id == selectedToEdit) {
+        
+        
+            } else {
+                mode = "edit"
+            }
+        
+        
+            updateScreen();
+        } else {
 
-    if (mode == 'edit' && id == selectedToEdit) {
-
-        // todos[id].date_edited = date.toUTCString();
-        // todos[id].title = input_title_edit;
-        // todos[id].content = input_content_edit;
-
-        db.ref('todos/').child(id).update({'date_edited': date.toUTCString()})
-        db.ref('todos/').child(id).update({'title': model.inputs.todo_edit.title})
-        db.ref('todos/').child(id).update({'content': model.inputs.todo_edit.content})
-
-        selectedToEdit = '';
-        input_title_edit = '';
-        input_content_edit = '';
-        mode = '';
-
-    } else {
-        mode = "edit"
-    }
-
-
-    updateScreen();
-
+        }
+    });
 }
 
-function completeTodo(id) {
+function completeTodo() {
     mode = '';
     selectedToEdit = '';
     let completed = getValueOf(id, 'completed');
     
 
     if (completed === false) {
-        let date = new Date();
-        db.ref('todos/').child(id).update({'date_finished': date.toUTCString()})
-        db.ref('todos/').child(id).update({'completed': true})
+
     } else {console.log(completed);}
     updateScreen();
 }
 
-function removeTodo(id) {
-    db.ref('todos/' + id).set(null, (error) => {
-    if (error) {
-       errorHandler(3);
-    } else {
-        console.log('Success')
-    }});
+function removeTodo() {
+
     updateScreen();
 }
 
@@ -166,7 +170,7 @@ function selectCategory(a, b) {
 
 function validateEmail(email) {
 
-    let mailregex = /^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/;
+    let mailregex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if(email.match(mailregex)) {
         return true;

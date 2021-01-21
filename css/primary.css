@@ -368,6 +368,9 @@ button {
 
 .form input[type=submit] {
     width:auto;
+    background:rgba(0, 0, 0, 0.693);
+    border:none;
+    color:white;
 }
 .form div {
     padding:5px;
@@ -390,6 +393,10 @@ button {
     display:flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.pad {
+    padding:10px;
 }
 
 @keyframes slideInError {
