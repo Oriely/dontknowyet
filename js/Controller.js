@@ -1,4 +1,58 @@
 
+function login(e, form) {
+    e.preventDefault();
+    
+    let email = form['login-email'].value
+    let password = form['login-password'].value;
+   
+   
+    if (email && password) {
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((user) => {
+            // Signed in 
+            // ...
+            })
+            .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            });
+
+    console.log(email);
+    console.log(password);
+
+
+    } else {
+
+    }
+    
+    updateScreen();
+}
+
+function register(e, form) {
+    e.preventDefault();
+
+    let email = form['register-email'].value;
+    let password = form['register-password'].value;
+
+    if(!validateEmail(email)) { errorHandler('Thats not a valid email address'); return false;}
+
+    if(password.length < 8) { errorHandler('Passwords has to be 8 characters long or more'); return false;}
+    
+    if(validateEmail(email) && password.length >= 8) {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((user) => {
+            // Signed in 
+            // ...
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // ..
+        });
+    }
+    updateScreen();
+}
+
 function addTodo() {
     if (!model.inputs.todo_new.title || !model.inputs.todo_new.content || !model.inputs.todo_new.category) {
         errorHandler(4);
@@ -108,4 +162,13 @@ function changeScreen(p) {
 function selectCategory(a, b) {
     model.inputs.todo_new.category = model.app.todo_categories[b].name
     updateScreen();
+}
+
+function validateEmail(email) {
+
+    let mailregex = /^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/;
+
+    if(email.match(mailregex)) {
+        return true;
+    } else false;
 }

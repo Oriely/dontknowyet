@@ -4,6 +4,69 @@ window.onbeforeunload = function() { };
 let tmpCat = '';
 
 
+function loginScreen() {
+
+    container.innerHTML = `
+        <div class="wrapper">
+
+            <div class="login">
+
+                <form class="form" onsubmit="login(event, this)">
+                    <div>
+                        <label for="login-email">email</label>
+                        <input autofocus id="login-email" type="email" placeholder="testing@testing.com">
+                    </div>
+                    <div>
+                        <label for="login-password">password</label>
+                        <input id="login-password" type="password" placeholder="password">
+                    </div>
+                    ${(error ? '<div class="error-wrapper"><div class="errors  ">'+ error +'</div></div>' : '')}
+                    <div class="login-submit">
+                        <input type="submit" value="Login">
+                    </div>
+                    <div>
+                        <a onclick="changeScreen('register')">Dont have an account? Register</a>
+                    </div>
+                </form>
+
+                
+            </div>
+
+        </div>   
+    `;
+}
+
+function registerScreen() {
+    container.innerHTML = `
+        <div class="wrapper">
+
+            <div class="register">
+
+                <form class="form" onsubmit="register(event, this)">
+                    <div>
+                        <label for="register-email">email</label>
+                        <input autofocus id="register-email" type="email" placeholder="testing@testing.com">
+                    </div>
+                    <div>
+                        <label for="register-password">password</label>
+                        <input id="register-password" type="password" placeholder="password">
+                    </div>
+                    ${(error ? '<div class="error-wrapper"><div class="errors  ">'+ error +'</div></div>' : '')}
+                    <div class="login-submit">
+                        <input type="submit" value="Register">
+                    </div>
+                    <div>
+                    <a onclick="changeScreen('login')">Already have an account? Login here.</a>
+                    </div>
+                </form>
+
+                
+            </div>
+
+        </div>   
+    `;
+}
+
 function mainScreen() {
     tmpCat = '';
     

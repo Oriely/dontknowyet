@@ -1,10 +1,10 @@
 //server
-let db = firebase.database();
-let db_ref = db.ref();
+let db = firebase.firestore();
 
 let model = {
     app: {
-        on_page: '',
+        pages: ['login', 'register', 'main', 'config', 'stats'],
+        on_page: 'login',
         todo_viewmode: 'panes',
         todo_categories: [
             { name: 'personal', color: 'red' },
@@ -38,9 +38,6 @@ let model = {
 
     }
 }
-
-
-
 
 // local
 let critError;

@@ -5,26 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
-    <link rel="stylesheet" href="primary.css">
+    <link rel="stylesheet" href="css/primary.css">
     
 </head>
 <body>
     <div id="container">
 
     </div>  
-    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
-
-    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
-
-    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.3/firebase-auth.js"></script>   
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
 
-    <!-- Add Firebase products that you want to use -->
-    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
     <script>
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         var firebaseConfig = {
             apiKey: "AIzaSyDLKY35K5zzIf65TRUuDasSM4yaTpdrQ-4",
             authDomain: "slockertsen-todo.firebaseapp.com",
@@ -39,19 +32,12 @@
         firebase.initializeApp(firebaseConfig);
         firebase.analytics();
     </script>
-    <script>
-
-        
     
-    </script>
-
-    
-
-    <script src="Model.js"></script>
-    <script src="primary.js"></script>
-    <script src="View.js"></script>
-    <script src="Controller.js"></script>
-    <script src="Misc.js"></script>
+    <script src="js/Model.js"></script>
+    <script src="js/primary.js"></script>
+    <script src="js/View.js"></script>
+    <script src="js/Controller.js"></script>
+    <script src="js/Misc.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" integrity="sha512-F5QTlBqZlvuBEs9LQPqc1iZv2UMxcVXezbHzomzS6Df4MZMClge/8+gXrKw2fl5ysdk4rWjR0vKS7NNkfymaBQ==" crossorigin="anonymous"></script>
     <script>
 
@@ -73,52 +59,28 @@
 
     });
     function updateScreen() {
-        // high to low
+        firebase.auth().onAuthStateChanged((user) => {
 
+            if (user) {
+                // User is signed in, see docs for a list of available properties
+                // https://firebase.google.com/docs/reference/js/firebase.User
+                var uid = user.uid;
+                // ...
+            } else {
+                model.app.on_page = 'login';
+                
+            }
+        });
+
+        if (!model.app.pages.includes(model.app.on_page)) {alert('something'); return}
+        
+        
         for(let i = 0; i < model.app.todo_categories.length; i++) {
             model.tmpHTML.todos.push(i);
         }
 
-        let tod = [];
-        todoHTML_low = '';
-        todoHTML_med = '';
-        todoHTML_high = '';
+        if (!model.app.pages.includes(model.app.on_page)) {alert('something'); return}
 
-        for (let i = 0; i < model.app.todo_categories.length; i++) {
-            
-        db.ref('todos/').orderByChild("priority").equalTo(model.app.todo_categories[i].name).on("child_added", snapshot => {
-                let s_val = snapshot.val();
-
-                let s_key = snapshot.key;
-
-                todoHTML_high += todoCreateHTML(s_val, s_key);
-        });
-
-        }
-
-        // db.ref('todos/').orderByChild("priority").equalTo(1).on("child_added", snapshot => {
-        //         let s_val = snapshot.val();
-
-        //         let s_key = snapshot.key;
-
-        //         todoHTML_high += todoCreateHTML(s_val, s_key);
-        // });
-
-        // db.ref('todos/').orderByChild("priority").equalTo(2).on("child_added", snapshot => {
-        //         let s_val = snapshot.val();
-
-        //         let s_key = snapshot.key;
-
-        //         todoHTML_med += todoCreateHTML(s_val, s_key);
-
-        // });
-        // db.ref('todos/').orderByChild("priority").equalTo(3).on("child_added", snapshot => {
-        //         let s_val = snapshot.val();
-
-        //         let s_key = snapshot.key;
-
-        //         todoHTML_low += todoCreateHTML(s_val, s_key);
-        // });
         if (model.app.on_page == 'configuration') {
             configScreen();
         }
@@ -130,7 +92,12 @@
             mainScreen();
 
         }
+
+
+
+        
     }
+
     updateScreen();     
     </script>
 </body>

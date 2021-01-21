@@ -34,3 +34,11 @@ Site where i can add todos by category and list them to see.
 ![Alt text](wireframes/config.png)
 ##### stats
 ![Alt text](wireframes/stats.png)
+
+
+Notes
+
+make a check for if page does not exist
+make register function
+make login function
+add checks for if logged in

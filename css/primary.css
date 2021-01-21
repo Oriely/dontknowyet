@@ -64,7 +64,11 @@ input { display:inline-block; }
 
 .wrapper {
     width:100%;
-    padding:10px;
+}
+
+.wrapper {
+    width:100%;
+    height:100%;
 }
 
 nav {
@@ -329,6 +333,65 @@ button {
     opacity:0.3;
     transition:1s ease;
 }
+
+.login {
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    height:100vh;
+    flex-direction: column;
+}
+
+.register {
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    height:100vh;
+    flex-direction: column;
+}
+
+.form .errors {
+    font-size:12px;
+    padding:0;
+}
+
+.form {
+    width:50%;
+    background-color:rgba(0, 0, 0, 0.467);
+    padding:10px;
+}
+
+.form input {
+    padding:10px;
+    width:100%;
+}
+
+.form input[type=submit] {
+    width:auto;
+}
+.form div {
+    padding:5px;
+}
+
+.form .error-wrapper {
+    padding:0 5px 0 5px;
+}
+
+.form label {
+    display:block;
+    font-size:10px;
+}
+
+.form a {
+
+}
+
+.login-submit {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 @keyframes slideInError {
     0% {
         transform: translateX(-500px);
@@ -341,11 +404,11 @@ button {
 
 @keyframes slideIn {
     0% {
-        transform: translateY(-500px);
+        transform: translateX(-3000px);
     }
 
     100% {
-        transform: translateY(0);
+        transform: translateX(0);
     }
 }
 
