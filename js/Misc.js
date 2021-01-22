@@ -46,3 +46,17 @@ function hideErrors() {
     error = '';
     updateScreen();
 }
+
+function loadTodos(uid) {
+    db.collection('todos').doc(uid).collection('ongoing').where("completed" , "==", false)
+    .get()
+    .then(function(snap) {
+        snap.forEach(function(doc) {
+            console.log(doc.id, " => ", doc.data());
+        });
+    })
+    .catch(function(err) {
+        console.log(err);
+    });
+
+}
