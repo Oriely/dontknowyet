@@ -24,7 +24,28 @@ Site where i can add todos by category and list them to see.
 - Show total finished & total unfinished todos in a table/list
 - maybe some graphs of some kind??
 
+##### progress
 
+- make a check for if page does not exist
+
+- make register function [80%]
+[--------------------------------------------------------------------------------                   ]
+- make login function [80%]
+[--------------------------------------------------------------------------------                   ]
+- add checks for if logged in [50%]
+[-------------------------------------------------                                                  ]
+- make function for adding todos to a users todo list [20%]
+[--------------------                                                                               ]
+- make function for editing a specific todo [0%]
+[                                                                                                   ]
+- make function for removing a todo [0%]
+[                                                                                                   ]
+- make function for updating a single field in a Firestore document [0%]
+[                                                                                                   ]
+
+Making view
+- layout and css
+[-------------------------------------------------                                                  ]
 
 ### wireframes
 
@@ -36,16 +57,3 @@ Site where i can add todos by category and list them to see.
 ![Alt text](wireframes/stats.png)
 
 
-Notes
-
-make a check for if page does not exist
-make register function [80%]
-make login function [80%]
-add checks for if logged in [50%]
-make function for adding todos to a users todo list []
-make function for editing a specific todo []
-make function for removing a todo []
-make function for updating a single field in a Firestore document []
-
-
-Making view
