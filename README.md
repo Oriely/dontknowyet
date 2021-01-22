@@ -26,21 +26,21 @@ Site where i can add todos by category and list them to see.
 
 ##### progress
 
-- make a check for if page does not exist [80%]__
+- make a check for if page does not exist [80%]\
 ![](https://progress-bar.dev/80/?scale=500)
-- make register function [80%]__
+- make register function [80%]\
 ![](https://progress-bar.dev/80/?scale=500)
-- make login function [80%]__
+- make login function [80%]\
 ![](https://progress-bar.dev/80/?scale=500)
-- add checks for if logged in [50%]__
+- add checks for if logged in [50%]\
 ![](https://progress-bar.dev/50/?scale=500)
-- make function for adding todos to a users todo list [20%]__
+- make function for adding todos to a users todo list [20%]\
 ![](https://progress-bar.dev/20/?scale=500)
-- make function for editing a specific todo [0%]__
+- make function for editing a specific todo [0%]\
 ![](https://progress-bar.dev/0/?scale=500)
-- make function for removing a todo [0%]__
+- make function for removing a todo [0%]\
 ![](https://progress-bar.dev/0/?scale=500)
-- make function for updating a single field in a Firestore document [0%]__
+- make function for updating a single field in a Firestore document [0%]\
 ![](https://progress-bar.dev/0/?scale=500)
 
 Making view
