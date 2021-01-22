@@ -45,7 +45,7 @@ Site where i can add todos by category and list them to see.
 
 
 - layout and css
-![](https://progress-bar.dev/50/?scale=500)
+![](https://progress-bar.dev/50/?scale=500)\
 
 ### wireframes
 
