@@ -43,8 +43,9 @@ Site where i can add todos by category and list them to see.
 - make function for updating a single field in a Firestore document [0%]\
 ![](https://progress-bar.dev/0/?scale=500)
 
-Making view
-- layout and css                                     ]
+
+- layout and css
+![](https://progress-bar.dev/50/?scale=500)
 
 ### wireframes
 
