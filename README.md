@@ -29,7 +29,7 @@ Site where i can add todos by category and list them to see.
 - make a check for if page does not exist
 
 - make register function [80%]
-[--------------------------------------------------------------------------------                   ]
+`[--------------------------------------------------------------------------------                   ]`
 - make login function [80%]
 [--------------------------------------------------------------------------------                   ]
 - add checks for if logged in [50%]
