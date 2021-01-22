@@ -5,7 +5,12 @@ let tmpCat = '';
 
 
 function loginScreen() {
+    firebase.auth().onAuthStateChanged((user) => {
 
+        if (user) {
+
+        } 
+    });
     container.innerHTML = `
         <div class="wrapper">
 

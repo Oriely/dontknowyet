@@ -20,6 +20,7 @@ function login(e, form) {
             var errorMessage = error.message;
 
             error = errorMessage;
+            updateScreen();
             });
 
     console.log(email);
@@ -78,7 +79,7 @@ function addTodo() {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 // Add a new document with a generated id.
-                db.collection("todos").doc(user.id).collection('ongoing').add({
+                db.collection("todos").doc(user.uid).collection('ongoing').add({
                     id: genId(),
                     date_created: Date.now(),
                     date_edited: '',
@@ -88,11 +89,13 @@ function addTodo() {
                     priority: model.inputs.todo_new.category,
                     completed: false
                 })
+                
                 .then(function(docRef) {
                     console.log("Document written with ID: ", docRef.id);
                 })
                 .catch(function(err) {
                     console.error("Error adding document: ", err);
+                    console.log(user.uid)
                     error = err;
                 });
             
