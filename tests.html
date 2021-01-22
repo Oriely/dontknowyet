@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Test Suite</title>
+    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.14.0.css">
+  </head>
+  <body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <script src="https://code.jquery.com/qunit/qunit-2.14.0.js"></script>
+    <script src="controller.js"></script>
+    <script>
+        let todos = {};
+        const add = (a, b) => a + b;
+
+        function updateScreen() {
+
+        }
+
+        let todoHTML_high = '';
+        let todoHTML_low = ''
+        let todoHTML_medium = '';
+        let input_title = '';
+        let input_content = '';
+        let input_priority = '';
+        let errors = '';
+        let mode = '';
+        let selectedToEdit = '';
+        let input_title_edit = '';
+        let input_content_edit = '';
+        let priority = [1, 2, 3];
+        let filter = '';
+        let sorting = '';
+        let on_page = 'main';
+
+        QUnit.module('ting', function() {
+        
+          QUnit.test('check object added', function(assert) {
+            
+            
+
+            input_content = '123';
+
+            input_title = '123';
+
+            input_priority = 1;
+
+            const obj = addTodo();
+
+            assert.equal(obj.title, '123');
+            assert.equal(obj.content, '123')
+            assert.equal(obj.priority, 1)
+
+
+          });
+          QUnit.test('edited todo', function(assert) {
+            
+            todos = {    123: {
+                id: 213,
+                date_added: Date.now(),
+                date_edited: '',
+                date_finished: '',
+                title: '123123123',
+                content: 'asdoqdpoqkdpqkwdpoqwkdpqkwdpoqwd',
+                priority: 3,
+                completed: false
+            },};
+
+            input_content_edit = '123';
+
+            input_title_edit = '123';
+
+            input_priority_edit = 1;
+
+            editTodo(123);
+
+            let expected ={
+              123:{
+                id: 213,
+                date_added: Date.now(),
+                date_edited: '',
+                date_finished: '',
+                title: '122',
+                content: '122',
+                priority: 3,
+                completed: false
+            }
+            };
+
+            assert.equal(todos.content, expected.content);
+            assert.equal(todos.title, expected.title);
+            assert.equal(todos.priority, expected.priority);
+
+
+          });
+
+          QUnit.test('complete todo', function(assert) {
+            todos = {    
+              123: {
+                id: 213,
+                date_added: Date.now(),
+                date_edited: '',
+                date_finished: '',
+                title: '123123123',
+                content: 'asdoqdpoqkdpqkwdpoqwkdpqkwdpoqwd',
+                priority: 3,
+                completed: false
+            },};
+
+            completeTodo(123);
+
+            let expected  = {    
+              123: {
+                id: 213,
+                date_added: Date.now(),
+                date_edited: '',
+                date_finished: Date.now(),
+                title: '123123123',
+                content: 'asdoqdpoqkdpqkwdpoqwkdpqkwdpoqwd',
+                priority: 3,
+                completed: true
+            },};
+
+            assert.deepEqual(todos, expected);
+          });
+          QUnit.test('remove todo', function(assert) {
+            
+            todos = {    
+              123: {
+                id: 213,
+                date_added: Date.now(),
+                date_edited: '',
+                date_finished: '',
+                title: '123123123',
+                content: 'asdoqdpoqkdpqkwdpoqwkdpqkwdpoqwd',
+                priority: 3,
+                completed: false
+            },};
+
+
+            removeTodo(123);
+
+            let expected = {};
+
+            assert.deepEqual(todos, expected);
+            assert.deepEqual(todos, expected);
+            assert.deepEqual(todos, expected);
+
+
+          });
+          
+          QUnit.test('remove todo', function(assert) {
+            
+           
+          });
+
+        });
+      
+      </script>
+      
+</body>
+</html>

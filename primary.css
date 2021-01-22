@@ -72,6 +72,12 @@
     -webkit-animation: slideIn 0.5s forwards;
     -moz-animation: slideIn 0.5s forwards;
     animation: slideIn 0.5s forwards;
+    display:flex;
+    justify-content: space-between;
+}
+
+.errors span {
+    font-size:100%;
 }
 
 .todo-controls {
@@ -94,6 +100,18 @@ button {
 }
 
 input { display:inline;}
+
+nav {
+    display:flex;
+
+}
+nav>div{
+    margin-right:10px;
+    margin-bottom:10px;
+    background:gray;
+    padding:10px;
+    user-select:none;
+}
 
 @keyframes slideIn {
     0% {
