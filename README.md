@@ -39,6 +39,13 @@ Site where i can add todos by category and list them to see.
 Notes
 
 make a check for if page does not exist
-make register function
-make login function
-add checks for if logged in
+make register function [80%]
+make login function [80%]
+add checks for if logged in [50%]
+make function for adding todos to a users todo list []
+make function for editing a specific todo []
+make function for removing a todo []
+make function for updating a single field in a Firestore document []
+
+
+Making view
