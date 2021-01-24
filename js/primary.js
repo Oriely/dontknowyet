@@ -21,8 +21,6 @@ function updateScreen() {
 
         if (user) {
             mainScreen();
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/firebase.User
             var uid = user.uid;
             // ...
             if (model.app.on_page == 'config') {

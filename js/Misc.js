@@ -48,15 +48,18 @@ function hideErrors() {
 }
 
 function loadTodos(uid) {
-    db.collection('todos').doc(uid).collection('ongoing').where("completed" , "==", false)
+    db.collection('todos').doc(uid).collection('ongoing').where('completed' , "==", false)
     .get()
     .then(function(snap) {
+        // console.log('snap', snap)
         snap.forEach(function(doc) {
-            console.log(doc.id, " => ", doc.data());
+            // console.log('doc => ', doc.data(), snap.key);
+            // console.log(doc.data().completed);
+            todoHTML += todoCreateHTML(doc.data(), doc.id);
+            
         });
     })
     .catch(function(err) {
         console.log(err);
     });
-
 }

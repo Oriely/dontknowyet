@@ -49,8 +49,18 @@ function signout() {
 function register(e, form) {
     e.preventDefault();
 
-    let email = form['register-email'].value;
-    let password = form['register-password'].value;
+    const username = form['register-username'].value.toLowerCase();
+    const email = form['register-email'].value.toLowerCase();
+    const password = form['register-password'].value;
+    const password_comf = form['register-password-comf'].value;
+    const firstname = form['register-firstname'].value.toLowerCase();
+    const lastname = form['register-lastname'].value.toLowerCase();
+
+    if(password_comf != password) { errorHandler('Comfirm password is not same as password.') }
+
+    if (!firstname || !lastname) { errorHandler('You need to type in your first and last name.')} 
+
+    if(!username) {errorHandler('You need to type in a username')}
 
     if(!validateEmail(email)) { errorHandler('Thats not a valid email address'); return false;}
 
@@ -58,9 +68,28 @@ function register(e, form) {
     
     if(validateEmail(email) && password.length >= 8) {
         firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then((user) => {
-            // Signed in 
-            // ...
+        .then((response) => {
+            const uid = response.user.uid
+            const user_data = {
+                id: uid,
+                username: username,
+                firstname:  firstname.toLowerCase(),
+                lastname: lastname.toLowerCase(),
+                groups: ['user'],
+                email,
+                date_registered: Date.now()
+            }
+            db.collection('users')
+                .doc(uid)
+                .set(user_data)
+                .catch((error) => {
+                    console.log(error);
+                })
+            db.collection('todos')
+                .doc(uid)
+                .set()
+
+
         })
         .catch((error) => {
             var errorCode = error.code;
@@ -73,7 +102,7 @@ function register(e, form) {
 
 function addTodo() {
     if (!model.inputs.todo_new.title || !model.inputs.todo_new.content || !model.inputs.todo_new.category) {
-        errorHandler(4);
+        errorHandler('eh');
 
     } else {    
         firebase.auth().onAuthStateChanged((user) => {
@@ -86,7 +115,7 @@ function addTodo() {
                     date_finished: '',
                     title: model.inputs.todo_new.title,
                     content: model.inputs.todo_new.content,
-                    priority: model.inputs.todo_new.category,
+                    category: model.inputs.todo_new.category,
                     completed: false
                 })
                 

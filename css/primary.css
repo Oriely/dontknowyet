@@ -372,9 +372,10 @@ button {
     border:none;
     color:white;
 }
-.form div {
+.form > div {
     padding:5px;
 }
+
 
 .form .error-wrapper {
     padding:0 5px 0 5px;
@@ -397,6 +398,19 @@ button {
 
 .pad {
     padding:10px;
+}
+
+.full-name {
+    display:flex;
+    width:100%;
+}
+
+.full-name > div {
+    width:100%;
+}
+.full-name div:nth-child(1) {
+    padding-right:5px;
+    
 }
 
 @keyframes slideInError {
