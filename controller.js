@@ -39,7 +39,7 @@ function editTodo(id) {
         input_title_edit = todos[id].title;
         input_content_edit = todos[id].content;
     }
-
+    
     if (mode == 'edit' && id == selectedToEdit) {
 
         todos[id].date_edited = Date.now();
