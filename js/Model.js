@@ -6,14 +6,6 @@ let model = {
         pages: ['login', 'register', 'main', 'config', 'stats'],
         on_page: 'login',
         todo_viewmode: 'panes',
-        todo_categories: [
-            { name: 'personal', color: 'red' },
-            { name: 'work', color: '#CCC' },
-            { name: 'testin', color: 'blue' },
-            { name: 'testiwn', color: 'purple' },
-            { name: 'tein', color: 'green' },
-            { name: 'testieqn', color: 'white' },
-        ],
         edit_mode: false,
         mobile: false,
 

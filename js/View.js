@@ -104,11 +104,9 @@ function mainScreen() {
     
             if(model.app.todo_viewmode === 'panes') {todosPanes()}
             
-            if(model.app.todo_viewmode === 'list') {todosList()}
-        
-            for (let i = 0; i < model.app.todo_categories.length; i++) {
-                tmpCat += categoryCreate(i);
-            }
+            if(model.app.todo_viewmode === 'list') {}
+
+            
         
             container.innerHTML = `
                 <div class="wrapper pad">
@@ -230,4 +228,15 @@ function todoCreateHTML(data, id) {
         </div>
     </div>
     `;
+}
+
+function loadCategories(uid) {
+    db.collection('user_settings').doc(uid).collection('todo_categories')
+    .get()
+    .then((snap) => {
+        
+    })  
+    .catch((err) => {
+        console.log(err)
+    });
 }

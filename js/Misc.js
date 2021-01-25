@@ -59,6 +59,9 @@ function loadTodos(uid) {
             
         });
     })
+    .then(function () {
+        console.log(3);
+    })
     .catch(function(err) {
         console.log(err);
     });

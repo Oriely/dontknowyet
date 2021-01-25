@@ -2,102 +2,138 @@
 function login(e, form) {
     e.preventDefault();
     
-    let email = form['login-email'].value
-    let password = form['login-password'].value;
-   
-    if(!email || !password) {
-        error = 'Type in email and password';
-    }
-   
-    if (email && password) {
-        firebase.auth().signInWithEmailAndPassword(email, password)
-            .then((user) => {
-            // Signed in 
-            // ...
-            })
-            .catch((error) => {
-            var errorCode = error.code;
-            var errorMessage = error.message;
+    if(firebase.auth().onAuthStateChanged((user) => {
+        if(!user) {
+            let email = form['login-email'].value
+            let password = form['login-password'].value;
+        
+            if(!email || !password) {
+                error = 'Type in email and password';
+            }
+        
+            if (email && password) {
+                firebase.auth().signInWithEmailAndPassword(email, password)
+                    .then((user) => {
+                        
+                    })
+                    .catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
 
-            error = errorMessage;
-            updateScreen();
-            });
+                    error = errorMessage;
+                    updateScreen();
+                    });
+            } else {
 
-    console.log(email);
-    console.log(password);
-
-
-    } else {
-
-    }
+            }
+        }
+    }))
     
     updateScreen();
 }
 
 function signout() {
+    firebase.auth().onAuthStateChanged((user) => {
+        if(!user) {
+            firebase.auth().signOut().then(() => {
+                
+                updateScreen();
 
-    firebase.auth().signOut().then(() => {
-        updateScreen();
-    // Sign-out successful.
-    }).catch((error) => {
-        alert(error);
+            }).catch((error) => {
+                alert(error);
+            });
+
+            updateScreen();
+        }
     });
-
-    updateScreen();
 }
 
 function register(e, form) {
-    e.preventDefault();
-
-    const username = form['register-username'].value.toLowerCase();
-    const email = form['register-email'].value.toLowerCase();
-    const password = form['register-password'].value;
-    const password_comf = form['register-password-comf'].value;
-    const firstname = form['register-firstname'].value.toLowerCase();
-    const lastname = form['register-lastname'].value.toLowerCase();
-
-    if(password_comf != password) { errorHandler('Comfirm password is not same as password.') }
-
-    if (!firstname || !lastname) { errorHandler('You need to type in your first and last name.')} 
-
-    if(!username) {errorHandler('You need to type in a username')}
-
-    if(!validateEmail(email)) { errorHandler('Thats not a valid email address'); return false;}
-
-    if(password.length < 8) { errorHandler('Passwords has to be 8 characters long or more'); return false;}
     
-    if(validateEmail(email) && password.length >= 8) {
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then((response) => {
-            const uid = response.user.uid
-            const user_data = {
-                id: uid,
-                username: username,
-                firstname:  firstname.toLowerCase(),
-                lastname: lastname.toLowerCase(),
-                groups: ['user'],
-                email,
-                date_registered: Date.now()
-            }
-            db.collection('users')
-                .doc(uid)
-                .set(user_data)
-                .catch((error) => {
-                    console.log(error);
-                })
-            db.collection('todos')
-                .doc(uid)
-                .set()
-
-
-        })
-        .catch((error) => {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // ..
-        });
+    e.preventDefault();
+    
+    if(!e || !form) {
+        return false;
     }
-    updateScreen();
+
+    firebase.auth().onAuthStateChanged((user) => {
+        if(!user) {
+            const username = form['register-username'].value.toLowerCase();
+            const email = form['register-email'].value.toLowerCase();
+            const password = form['register-password'].value;
+            const password_comf = form['register-password-comf'].value;
+            const firstname = form['register-firstname'].value.toLowerCase();
+            const lastname = form['register-lastname'].value.toLowerCase();
+        
+            if(password_comf != password) { errorHandler('Comfirm password is not same as password.') }
+        
+            if (!firstname || !lastname) { errorHandler('You need to type in your first and last name.')} 
+        
+            if(!username) {errorHandler('You need to type in a username')}
+        
+            if(!validateEmail(email)) { errorHandler('Thats not a valid email address'); return false;}
+        
+            if(password.length < 8) { errorHandler('Passwords has to be 8 characters long or more'); return false;}
+            
+            if(validateEmail(email) && password.length >= 8 && firstname && lastname && password === password_comf) {
+                firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then((response) => {
+                    const uid = response.user.uid
+                    const user_data = {
+                        id: uid,
+                        username: username,
+                        firstname:  firstname.toLowerCase(),
+                        lastname: lastname.toLowerCase(),
+                        groups: ['user'],
+                        email,
+                        date_registered: Date.now()
+                    }
+                    db.collection('users')
+                        .doc(uid)
+                        .set(user_data)
+                        .catch((error) => {
+                            console.log(error);
+                        })
+        
+                    const default_settings = {
+                        language: 'en',
+                        todo_categories: [
+                            {
+                                name: 'work',
+                                color: 'red'
+                            },
+                            {
+                                name: 'personal',
+                                color: 'red'
+        
+                            },
+                            {
+                                name: 'random',
+                                color: 'blue'
+                            }
+        
+                        ],
+                    };
+        
+                    db.collection('user_settings')
+                        .doc(uid)
+                        .set(default_settings)
+                        .catch((err) => {
+                            console.log(err);
+                        })
+                })
+                .catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    // ..
+                });
+            }
+
+            updateScreen();
+            
+        }
+    });
+
 }
 
 function addTodo() {
@@ -117,8 +153,7 @@ function addTodo() {
                     content: model.inputs.todo_new.content,
                     category: model.inputs.todo_new.category,
                     completed: false
-                })
-                
+                })    
                 .then(function(docRef) {
                     console.log("Document written with ID: ", docRef.id);
                 })

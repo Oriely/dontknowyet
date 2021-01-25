@@ -8,9 +8,6 @@ window.addEventListener('resize',function (e) {
     if (window.innerWidth <= 700) {
         model.app.mobile = true; 
         updateScreen();
-    } else {
-        model.app.mobile = false; 
-        updateScreen();
     }
 
 });
