@@ -34,6 +34,8 @@ let model = {
 // local
 let critError;
 let error;
+let response = '';
+let errors = [];
 let todos = [];
 let container = document.getElementById('container');
 let todoHTML = '';
@@ -47,7 +49,6 @@ let todoHTML_high = '';
 let input_title = '';
 let input_content = '';
 let input_priority = '';
-let errors = '';
 let mode = '';
 let selectedToEdit = '';
 let input_title_edit = '';

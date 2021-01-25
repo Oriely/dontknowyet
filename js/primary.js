@@ -1,25 +1,14 @@
 
-if(window.innerWidth <= 700) {
-    model.app.mobile = true; 
-    model.app.todo_viewmode = 'list';
-}
-
-window.addEventListener('resize',function (e) {
-    if (window.innerWidth <= 700) {
-        model.app.mobile = true; 
-        updateScreen();
-    }
-
-});
 function updateScreen() {
     if (!model.app.pages.includes(model.app.on_page)) {alert('something'); return}
-
+    
     firebase.auth().onAuthStateChanged((user) => {
+        
 
         if (user) {
-            mainScreen();
-            var uid = user.uid;
-            // ...
+                                
+
+
             if (model.app.on_page == 'config') {
                 configScreen();
             }
@@ -41,15 +30,6 @@ function updateScreen() {
             }
         }
     });
-
-
-
-
-    
-
-
-
-    
 }
 
 updateScreen();     

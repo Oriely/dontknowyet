@@ -413,6 +413,23 @@ button {
     
 }
 
+.response {
+    background:green;
+    color:white;
+    margin-top: 5px;
+    border-radius: 5px;
+    padding: 10px !important;
+    overflow-y: hidden;
+
+    position: relative;
+    display:flex;
+    justify-content: space-between;
+    -webkit-animation: slideIn 0.5s forwards;
+    -moz-animation: slideIn 0.5s forwards;
+    animation: slideIn 0.5s forwards;
+    color:white;
+}
+
 @keyframes slideInError {
     0% {
         transform: translateX(-500px);

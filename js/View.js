@@ -7,6 +7,10 @@ let tmpCat = '';
 function loginScreen() {
     firebase.auth().onAuthStateChanged((user) => {
         if (!user) {
+
+            errors.forEach((err) => {
+                error += err + '<br>';
+            });
             container.innerHTML = `
             <div class="wrapper">
     
@@ -42,7 +46,14 @@ function loginScreen() {
 
 function registerScreen() {
     firebase.auth().onAuthStateChanged((user) => {
+
         if (!user) {
+
+
+            errors.forEach((err) => {
+                error += err + '<br>';
+            });
+    
             container.innerHTML = `
             <div class="wrapper">
     
@@ -98,16 +109,22 @@ function mainScreen() {
     
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-            
+            clearErrors();
+
             loadTodos(user.uid);
-            tmpCat = '';
     
             if(model.app.todo_viewmode === 'panes') {todosPanes()}
             
             if(model.app.todo_viewmode === 'list') {}
 
+            errors.forEach((err) => {
+                error += err + '<br>';
+            });
             
-        
+            loadCategories(user.uid);
+
+
+
             container.innerHTML = `
                 <div class="wrapper pad">
                     <nav>
@@ -128,7 +145,7 @@ function mainScreen() {
                         <div class="input-title"><input id="" type="text" onkeyup="model.inputs.todo_new.title = this.value" value="${model.inputs.todo_new.title}" placeholder="Some title...."></div>
                         <div class="input-content"><textarea onkeyup="model.inputs.todo_new.content = this.value" value="">${model.inputs.todo_new.content}</textarea></div>
                         ${(error ? '<div class="errors  ">'+ error +'</div>' : '')}
-            
+                        ${(response ? '<div class="response">' + response + '</div>' : '')}
                         <div class="todo-controls">
             
                             <div class="todo-controls-left">
@@ -174,7 +191,9 @@ function mainScreen() {
 }
 
 function configScreen() {
-    firebase.auth.onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged((user) => {
+
+
         if(user) {
             container.innerHTML = `
             <div class="wrapper pad">
@@ -182,20 +201,22 @@ function configScreen() {
                     <div class="navigation">
                         <ul>
                             <li><a onclick="changeScreen('main')">Main</a></li>
-                            <li><a onclick="changeScreen('configuration')">Configuration</a></li>
+                            <li><a onclick="changeScreen('config')">Configuration</a></li>
                         </ul>
                     </div>
                     <div><button onclick="signout()" title="Sign out"><i class="fas fa-sign-out-alt"></i></button></div>
                 </nav>
             </div>
+            <div class="testing">
+
+            </div>
             `;
-        } else return false && alert('Please log in to acess this page.');
+        }
+
+
     })
 }
 
-function categoryCreate(e) {
-    return'<div onclick="selectCategory(this, \'' + e + '\')" class="category-item" ><span class="color-preview ' + (model.inputs.todo_new.category == model.app.todo_categories[e].name ? 'selected-category' : '') + '" style="background-color: '+ model.app.todo_categories[e].color + '"></span><p>'+ model.app.todo_categories[e].name +'</p></div>';
-}
 
 function todosPanes(todo) {
     return `
@@ -206,7 +227,6 @@ function todosPanes(todo) {
 }
 
 function todoCreateHTML(data, id) {
-    console.log(data);     
     return `
     <div class="todo-wrapper" data-key="${id}" style="background-color: ">
         <div class="todo-title">${(mode == 'edit' && id == selectedToEdit ? '<input class="edit" type="text" onkeyup="model.inputs.todo_edit.title = this.value" value="' + data.title +'">' : '<h1>' + data.title + '</h1>')}</div>
@@ -230,13 +250,39 @@ function todoCreateHTML(data, id) {
     `;
 }
 
+
+function categoryCreate(cat_name, cat_color) {
+    return '<div onclick="selectCategory(\'' + cat_name + '\')" class="category-item" ><span class="color-preview ' + (model.inputs.todo_new.category == cat_name ? 'selected-category' : '') + '" style="background-color: '+ cat_color + '"></span><p>'+ cat_name +'</p></div>';
+}
+
 function loadCategories(uid) {
-    db.collection('user_settings').doc(uid).collection('todo_categories')
+    db.collection('user_settings').doc(user.uid)
     .get()
-    .then((snap) => {
-        
+    .then(function (doc) {
+        if(doc.exists) {
+            tmpCat = '';
+            doc.data().todo_categories.forEach(element => {
+                tmpCat += categoryCreate(element.name, element.color);
+            });
+        }
     })  
     .catch((err) => {
         console.log(err)
+    });
+}
+
+function loadTodos(uid) {
+    
+    db.collection('todos').doc(uid).collection('ongoing').where('completed' , "==", false)
+    .get()
+    .then(function(snap) {
+        todoHTML = '';
+        snap.forEach(function(doc) {
+            todoHTML += todoCreateHTML(doc.data(), doc.id);
+            
+        });
+    })
+    .catch(function(err) {
+        console.log(err);
     });
 }

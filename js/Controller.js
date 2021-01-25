@@ -4,11 +4,14 @@ function login(e, form) {
     
     if(firebase.auth().onAuthStateChanged((user) => {
         if(!user) {
+            clearErrors();
+
             let email = form['login-email'].value
+            
             let password = form['login-password'].value;
         
             if(!email || !password) {
-                error = 'Type in email and password';
+                errorHandler('Please type in email and password.'); 
             }
         
             if (email && password) {
@@ -34,7 +37,9 @@ function login(e, form) {
 
 function signout() {
     firebase.auth().onAuthStateChanged((user) => {
-        if(!user) {
+        if(user) {
+            clearErrors();
+
             firebase.auth().signOut().then(() => {
                 
                 updateScreen();
@@ -58,6 +63,8 @@ function register(e, form) {
 
     firebase.auth().onAuthStateChanged((user) => {
         if(!user) {
+            clearErrors();
+
             const username = form['register-username'].value.toLowerCase();
             const email = form['register-email'].value.toLowerCase();
             const password = form['register-password'].value;
@@ -71,10 +78,12 @@ function register(e, form) {
         
             if(!username) {errorHandler('You need to type in a username')}
         
-            if(!validateEmail(email)) { errorHandler('Thats not a valid email address'); return false;}
-        
-            if(password.length < 8) { errorHandler('Passwords has to be 8 characters long or more'); return false;}
+            if(!validateEmail(email)) { errorHandler('Thats not a valid email address');}
             
+            if(!password) { errorHandler('Please type in a password and comfirm it.')}
+        
+            if(password.length < 8) { errorHandler('Passwords has to be 8 characters long or more'); }
+
             if(validateEmail(email) && password.length >= 8 && firstname && lastname && password === password_comf) {
                 firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((response) => {
@@ -137,41 +146,38 @@ function register(e, form) {
 }
 
 function addTodo() {
-    if (!model.inputs.todo_new.title || !model.inputs.todo_new.content || !model.inputs.todo_new.category) {
-        errorHandler('eh');
-
-    } else {    
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                // Add a new document with a generated id.
-                db.collection("todos").doc(user.uid).collection('ongoing').add({
-                    id: genId(),
-                    date_created: Date.now(),
-                    date_edited: '',
-                    date_finished: '',
-                    title: model.inputs.todo_new.title,
-                    content: model.inputs.todo_new.content,
-                    category: model.inputs.todo_new.category,
-                    completed: false
-                })    
-                .then(function(docRef) {
-                    console.log("Document written with ID: ", docRef.id);
-                })
-                .catch(function(err) {
-                    console.error("Error adding document: ", err);
-                    console.log(user.uid)
-                    error = err;
-                });
-            
-                updateScreen();
-            }
-        });
-    }
+                clearErrors();
 
+                if (!model.inputs.todo_new.title || !model.inputs.todo_new.content || !model.inputs.todo_new.category) {
+                    errorHandler('eh');
+                } else {   
+                    // Add a new document with a generated id.
+                    db.collection("todos").doc(user.uid).collection('ongoing').add({
+                        id: genId(),
+                        date_created: Date.now(),
+                        date_edited: '',
+                        date_finished: '',
+                        title: model.inputs.todo_new.title,
+                        content: model.inputs.todo_new.content,
+                        category: model.inputs.todo_new.category,
+                        completed: false
+                    })    
+                    .then(function(docRef) {
+                        response = 'Successfully added todo.'
+                        updateScreen();
+                    })
+                    .catch(function(err) {
 
+                    });
+                
+                    updateScreen();
+                }
+        }
+    });
 
     updateScreen();
-
 }
 
 
@@ -179,6 +185,7 @@ function editTodo(id) {
     firebase.auth().onAuthStateChanged((user) => {
 
         if (user) {
+            clearErrors();
             let date = new Date();
 
             selectedToEdit = id;
@@ -204,18 +211,12 @@ function editTodo(id) {
 }
 
 function completeTodo() {
-    mode = '';
-    selectedToEdit = '';
-    let completed = getValueOf(id, 'completed');
-    
-
-    if (completed === false) {
-
-    } else {console.log(completed);}
+    clearErrors();
     updateScreen();
 }
 
 function removeTodo() {
+    clearErrors();
 
     updateScreen();
 }
@@ -226,20 +227,48 @@ function changeViewmode(p) {
 }
 
 function changeScreen(p) {
+    clearErrors();
     model.app.on_page = p;
     updateScreen();
 }
 
-function selectCategory(a, b) {
-    model.inputs.todo_new.category = model.app.todo_categories[b].name
+function selectCategory(selected_category) {
+    model.inputs.todo_new.category = selected_category;
     updateScreen();
 }
 
 function validateEmail(email) {
 
-    let mailregex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const mailregex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if(email.match(mailregex)) {
         return true;
     } else false;
+
+}
+
+function createNewCategory(cat_name, cat_color) {
+    firebase.auth().onAuthStateChanged(function (user){
+        if(user) {
+            db.collection('user_settings').doc(user.uid).update({
+                todo_categories: firebase.firestore.FieldValue.arrayUnion({
+                    name: cat_name,
+                    color: cat_color
+                })
+            })
+        }
+    })
+}
+
+function removeCategory(cat_name, cat_color) {
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            db.collection('user_settings').doc(user.uid).update({
+                todo_categories: firebase.firestore.FieldValue.arrayRemove({
+                    name: cat_name,
+                    color: cat_color
+                })
+            })
+        }
+    })
 }

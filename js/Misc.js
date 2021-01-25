@@ -24,13 +24,9 @@ function getValueOf(key, p) {
 }
 
 function errorHandler(err) {
-    error = err;
-    updateScreen();
-
+    errors.push(err);
     // if(err === 3) { error = 'Something went wrong while trying to send data.' }
     // if(err === 4) { error = 'Missing inputs...'}
-
-
 }
 
 function filterTodos(a) {
@@ -47,22 +43,8 @@ function hideErrors() {
     updateScreen();
 }
 
-function loadTodos(uid) {
-    db.collection('todos').doc(uid).collection('ongoing').where('completed' , "==", false)
-    .get()
-    .then(function(snap) {
-        // console.log('snap', snap)
-        snap.forEach(function(doc) {
-            // console.log('doc => ', doc.data(), snap.key);
-            // console.log(doc.data().completed);
-            todoHTML += todoCreateHTML(doc.data(), doc.id);
-            
-        });
-    })
-    .then(function () {
-        console.log(3);
-    })
-    .catch(function(err) {
-        console.log(err);
-    });
+
+function clearErrors() {
+    errors = [];
+    error =  '';
 }
