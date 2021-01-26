@@ -1,17 +1,11 @@
-
-
-window.onbeforeunload = function() { };
-let tmpCat = '';
-
-
 function loginScreen() {
     firebase.auth().onAuthStateChanged((user) => {
         if (!user) {
-
             errors.forEach((err) => {
                 error += err + '<br>';
             });
-            container.innerHTML = `
+
+            return container.innerHTML = `
             <div class="wrapper">
     
                 <div class="login">
@@ -48,7 +42,6 @@ function registerScreen() {
     firebase.auth().onAuthStateChanged((user) => {
 
         if (!user) {
-
 
             errors.forEach((err) => {
                 error += err + '<br>';
@@ -106,22 +99,11 @@ function registerScreen() {
 }
 
 function mainScreen() {
-    
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-            clearErrors();
-
-            loadTodos(user.uid);
-    
-            if(model.app.todo_viewmode === 'panes') {todosPanes()}
-            
-            if(model.app.todo_viewmode === 'list') {}
-
             errors.forEach((err) => {
                 error += err + '<br>';
             });
-            
-            loadCategories(user.uid);
 
 
 
@@ -135,23 +117,26 @@ function mainScreen() {
                             </ul>
                         </div>
                         <div>
-                            <button ${(model.app.mobile === true ? 'disabled' : '')} class="switch" onclick="changeViewmode('${(model.app.todo_viewmode === 'panes' ? 'list' : 'panes')}')">${(model.app.todo_viewmode === 'panes' ? '<i class="fas fa-stream"></i>' : '<i class="fas fa-columns"></i>')}</button>
+                            <button ${(model.app.mobile === true ? 'disabled' : '')} 
+                            class="switch" onclick="changeViewmode('${(model.app.todo_viewmode === 'panes' ? 'list' : 'panes')}')">
+                            ${(model.app.todo_viewmode === 'panes' ? '<i class="fas fa-stream"></i>' : '<i class="fas fa-columns"></i>')}
+                            </button>
                             <button onclick="signout()" title="Sign out"><i class="fas fa-sign-out-alt"></i></button>
                         </div>
-            
+
                     </nav>
-                
+
                     <div class="input-form">
                         <div class="input-title"><input id="" type="text" onkeyup="model.inputs.todo_new.title = this.value" value="${model.inputs.todo_new.title}" placeholder="Some title...."></div>
                         <div class="input-content"><textarea onkeyup="model.inputs.todo_new.content = this.value" value="">${model.inputs.todo_new.content}</textarea></div>
-                        ${(error ? '<div class="errors  ">'+ error +'</div>' : '')}
+                        ${(error ? '<div class="errors  ">'+ error +'</div>' : '')} 
                         ${(response ? '<div class="response">' + response + '</div>' : '')}
                         <div class="todo-controls">
-            
+
                             <div class="todo-controls-left">
                                 <div><button onclick="addTodo()">Add todo</button></div>
                                 <div class="categories">
-                                    ${tmpCat}
+                                    $   
                                 </div>
                             </div>
                             <div class="todo-controls-right">
@@ -178,21 +163,25 @@ function mainScreen() {
                         
                         
                     </div>
-                
+
                     <div class="todo-${model.app.todo_viewmode}">
                         ${todoHTML}
                         
                     </div>
                 </div>
-            `;
-        } else return false && alert('Please log in to acess this page.');  
+                `;
+        }
     });
-    
+
+
+
 }
 
 function configScreen() {
     firebase.auth().onAuthStateChanged((user) => {
-
+        errors.forEach((err) => {
+            error += err + '<br>';
+        });
 
         if(user) {
             container.innerHTML = `
@@ -217,14 +206,6 @@ function configScreen() {
     })
 }
 
-
-function todosPanes(todo) {
-    return `
-        <section>
-            ${todo}
-        </section>
-    `;
-}
 
 function todoCreateHTML(data, id) {
     return `
@@ -253,36 +234,4 @@ function todoCreateHTML(data, id) {
 
 function categoryCreate(cat_name, cat_color) {
     return '<div onclick="selectCategory(\'' + cat_name + '\')" class="category-item" ><span class="color-preview ' + (model.inputs.todo_new.category == cat_name ? 'selected-category' : '') + '" style="background-color: '+ cat_color + '"></span><p>'+ cat_name +'</p></div>';
-}
-
-function loadCategories(uid) {
-    db.collection('user_settings').doc(user.uid)
-    .get()
-    .then(function (doc) {
-        if(doc.exists) {
-            tmpCat = '';
-            doc.data().todo_categories.forEach(element => {
-                tmpCat += categoryCreate(element.name, element.color);
-            });
-        }
-    })  
-    .catch((err) => {
-        console.log(err)
-    });
-}
-
-function loadTodos(uid) {
-    
-    db.collection('todos').doc(uid).collection('ongoing').where('completed' , "==", false)
-    .get()
-    .then(function(snap) {
-        todoHTML = '';
-        snap.forEach(function(doc) {
-            todoHTML += todoCreateHTML(doc.data(), doc.id);
-            
-        });
-    })
-    .catch(function(err) {
-        console.log(err);
-    });
 }

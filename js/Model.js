@@ -1,6 +1,8 @@
 //server
 let db = firebase.firestore();
 
+
+
 let model = {
     app: {
         pages: ['login', 'register', 'main', 'config', 'stats'],
@@ -56,8 +58,6 @@ let input_content_edit = '';
 let priority = [1, 2, 3];
 let filter = 0;
 let sorting = 1;
-
-
 
 
 

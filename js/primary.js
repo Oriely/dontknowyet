@@ -1,13 +1,10 @@
 
 function updateScreen() {
-    if (!model.app.pages.includes(model.app.on_page)) {alert('something'); return}
-    
+
     firebase.auth().onAuthStateChanged((user) => {
-        
-
         if (user) {
-                                
 
+            mainScreen();
 
             if (model.app.on_page == 'config') {
                 configScreen();
@@ -31,5 +28,4 @@ function updateScreen() {
         }
     });
 }
-
-updateScreen();     
+updateScreen();

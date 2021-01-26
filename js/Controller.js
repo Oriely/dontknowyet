@@ -84,7 +84,7 @@ function register(e, form) {
         
             if(password.length < 8) { errorHandler('Passwords has to be 8 characters long or more'); }
 
-            if(validateEmail(email) && password.length >= 8 && firstname && lastname && password === password_comf) {
+            if(validateEmail(email) && password.length >= 8 && firstname && lastname && password_comf === password) {
                 firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((response) => {
                     const uid = response.user.uid
@@ -226,9 +226,11 @@ function changeViewmode(p) {
     updateScreen() 
 }
 
-function changeScreen(p) {
+function changeScreen(page) {
     clearErrors();
-    model.app.on_page = p;
+    
+    if (!model.app.pages.includes(page)) {alert('something');  false} else { model.app.on_page = page; }
+
     updateScreen();
 }
 
