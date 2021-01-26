@@ -36,13 +36,10 @@
         let on_page = 'main';
 
         QUnit.module('ting', function() {
-        
+          ////////////////////////////////
           QUnit.test('check object added', function(assert) {
-            
-            
 
             input_content = '123';
-
             input_title = '123';
 
             input_priority = 1;
@@ -51,38 +48,40 @@
 
             assert.equal(obj.title, '123');
             assert.equal(obj.content, '123')
-            assert.equal(obj.priority, 1)
-
+            assert.equal(obj.priority, 1);
 
           });
+
+          ////////////////////////////////
           QUnit.test('edited todo', function(assert) {
             
-            todos = {    123: {
+            let date = Date.now();
+            todos = {    ekg: {
                 id: 213,
-                date_added: Date.now(),
+                date_added: date,
                 date_edited: '',
                 date_finished: '',
-                title: '123123123',
-                content: 'asdoqdpoqkdpqkwdpoqwkdpqkwdpoqwd',
+                title: 'Sigve',
+                content: 'Sigve',
                 priority: 3,
                 completed: false
             },};
-            mode = 'edit';
-            selectedToEdit = '123';
 
-            input_content_edit = '123';
 
-            input_title_edit = '123';
+            editTodo('ekg');
+            
+            input_title_edit = '122';
+            input_content_edit = '122';
 
-            input_priority_edit = 1;
+            editTodo('ekg')
 
-            editTodo(123);
-
-            let expected ={
-              123:{
+            console.log(selectedToEdit);
+            
+            let expected = {
+              ekg:{
                 id: 213,
-                date_added: Date.now(),
-                date_edited: '',
+                date_added: date,
+                date_edited: Date.now(),
                 date_finished: '',
                 title: '122',
                 content: '122',
@@ -91,18 +90,25 @@
             }
             };
 
-            assert.equal(todos.content, expected.content);
-            assert.equal(todos.title, expected.title);
-            assert.equal(todos.priority, expected.priority);
+            console.log('todos',todos);
+            console.log('expected', expected);
+            console.log(todos.ekg.title, expected.ekg.title);
+            console.log(todos.ekg.content, expected.ekg.content)
+            assert.equal(todos.ekg.title, expected.ekg.title);
+            assert.equal(todos.ekg.priority, expected.ekg.priority);
+            assert.equal(todos.ekg.content, expected.ekg.content);
+
 
 
           });
-
+          ////////////////////////////////
           QUnit.test('complete todo', function(assert) {
+
+            let date = Date.now();
             todos = {    
               123: {
                 id: 213,
-                date_added: Date.now(),
+                date_added: date,
                 date_edited: '',
                 date_finished: '',
                 title: '123123123',
@@ -116,7 +122,7 @@
             let expected  = {    
               123: {
                 id: 213,
-                date_added: Date.now(),
+                date_added: date,
                 date_edited: '',
                 date_finished: Date.now(),
                 title: '123123123',
@@ -125,8 +131,11 @@
                 completed: true
             },};
 
+
             assert.deepEqual(todos, expected);
           });
+
+          ////////////////////////////////
           QUnit.test('remove todo', function(assert) {
             
             todos = {    
@@ -148,14 +157,88 @@
             let expected = {};
 
             assert.deepEqual(todos, expected);
-            assert.deepEqual(todos, expected);
-            assert.deepEqual(todos, expected);
 
 
           });
           
-          QUnit.test('feil', function(assert) {
+          ////////////////////////////////
+          QUnit.test('feil?', function(assert) {
+            input_content = '';
+            input_title = '';
+            input_priority = '';
+
+            todos = {    
+              ekg: {
+                id: 213,
+                date_added: Date.now(),
+                date_edited: '',
+                date_finished: '',
+                title: '123123123',
+                content: 'asdoqdpoqkdpqkwdpoqwkdpqkwdpoqwd',
+                priority: 3,
+                completed: false
+            },};
+
+            addTodo()
+
+            let expected  = {    
+              ekg: {
+                id: 213,
+                date_added: Date.now(),
+                date_edited: '',
+                date_finished: '',
+                title: '123123123',
+                content: 'asdoqdpoqkdpqkwdpoqwkdpqkwdpoqwd',
+                priority: 3,
+                completed: false
+            },};
+
+            assert.deepEqual(todos,expected)
+           
+          });
+          
+          ////////////////////////////////
+          QUnit.test('feil 2?', function(assert) {
+            mode = 'sdadasd';
+
+            input_content_edit = 'aASDSDASDASD';
+            input_title_edit = 'ASDASDASDASDASDA';
+
+            let date = Date.now()
+
+            todos = {    
+              ekg: {
+                id: 213,
+                date_added: date,
+                date_edited: '',
+                date_finished: '',
+                title: '123123123',
+                content: 'asdoqdpoqkdpqkwdpoqwkdpqkwdpoqwd',
+                priority: 3,
+                completed: false
+            },};
+
+            editTodo('ekg')
+
+            editTodo('ekg');
+
+            let expected  = {    
+              ekg: {
+                id: 213,
+                date_added: date,
+                date_edited: Date.now(),
+                date_finished: '',
+                title: 'ASDASDASDASDASDA',
+                content: 'aASDSDASDASD',
+                priority: 3,
+                completed: false
+            }
             
+            };
+            // console.log(todos);
+            // console.log(expected)
+
+            assert.deepEqual(todos,expected)
            
           });
 

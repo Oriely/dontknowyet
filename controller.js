@@ -35,6 +35,7 @@ function editTodo(id) {
 
     selectedToEdit = id;
 
+
     if (input_title_edit == '' && input_content_edit == '') {
         input_title_edit = todos[id].title;
         input_content_edit = todos[id].content;
@@ -52,7 +53,7 @@ function editTodo(id) {
         mode = '';
 
     } else {
-        mode = "edit"
+        mode = 'edit';
     }
 
 
