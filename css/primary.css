@@ -217,7 +217,9 @@ text-align:right;
 
 .todo-list {
     display:grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    min-width:0;
+    min-height:0;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     gap:5px;
 }
 

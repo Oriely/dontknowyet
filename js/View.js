@@ -46,6 +46,7 @@ function registerScreen() {
             errors.forEach((err) => {
                 error += err + '<br>';
             });
+
     
             container.innerHTML = `
             <div class="wrapper">
@@ -104,8 +105,11 @@ function mainScreen() {
             errors.forEach((err) => {
                 error += err + '<br>';
             });
+            
 
 
+
+            
 
             container.innerHTML = `
                 <div class="wrapper pad">
@@ -147,12 +151,7 @@ function mainScreen() {
                                     <label>Filter by</label>
                                 </div>
                                 <div>
-                                    <select name="cars" id="cars" onchange="filterTodos(this)">
-                                        <option ${(filter == 0 ? 'selected' + ' ': '')}value="0">Nothing</option>
-                                        <option ${(filter == 1 ? 'selected' + ' ': '')}value="1">High</option>
-                                        <option ${(filter == 2 ? 'selected' + ' ': '')}value="2">Medium</option>
-                                        <option ${(filter == 3 ? 'selected' + ' ': '')}value="3">Low</option>
-                                    </select>
+
                                 </div>
                                 </div>
                                 
@@ -165,7 +164,7 @@ function mainScreen() {
                     </div>
 
                     <div class="todo-${model.app.todo_viewmode}">
-                        ${todoHTML}
+                        ${model.tmpHTML.todos}
                         
                     </div>
                 </div>
@@ -176,6 +175,13 @@ function mainScreen() {
 
 
 }
+
+/* <select name="cars" id="cars" onchange="filterTodos(this)">
+<option ${(filter == 0 ? 'selected' + ' ': '')}value="0">Nothing</option>
+<option ${(filter == 1 ? 'selected' + ' ': '')}value="1">High</option>
+<option ${(filter == 2 ? 'selected' + ' ': '')}value="2">Medium</option>
+<option ${(filter == 3 ? 'selected' + ' ': '')}value="3">Low</option>
+</select> */
 
 function configScreen() {
     firebase.auth().onAuthStateChanged((user) => {

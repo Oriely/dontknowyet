@@ -20,11 +20,14 @@ function login(e, form) {
                         
                     })
                     .catch((error) => {
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
 
-                    error = errorMessage;
-                    updateScreen();
+                        errorHandler(fbErrors[errorCode]);
+
+                        updateScreen();
+
+                    
                     });
             } else {
 
@@ -52,6 +55,8 @@ function signout() {
         }
     });
 }
+
+
 
 function register(e, form) {
     
@@ -132,9 +137,14 @@ function register(e, form) {
                         })
                 })
                 .catch((error) => {
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
-                    // ..
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+
+                    errorHandler(fbErrors[errorCode]);
+
+                    updateScreen();
+
+                    
                 });
             }
 
@@ -155,7 +165,6 @@ function addTodo() {
                 } else {   
                     // Add a new document with a generated id.
                     db.collection("todos").doc(user.uid).collection('ongoing').add({
-                        id: genId(),
                         date_created: Date.now(),
                         date_edited: '',
                         date_finished: '',
@@ -215,9 +224,21 @@ function completeTodo() {
     updateScreen();
 }
 
-function removeTodo() {
+function removeTodo(todo_id) {
     clearErrors();
-
+    firebase.auth().onAuthStateChanged( function (user) {
+        if(user) {
+            const uid = user.uid; 
+            db.collection('todos').doc(uid).collection('ongoing').doc(todo_id)
+            .delete()
+            .then(function() {
+                console.log('successfully removeTodo')
+            })
+            .catch(err   => {
+                console.log(err);
+            })
+        }
+    });
     updateScreen();
 }
 
