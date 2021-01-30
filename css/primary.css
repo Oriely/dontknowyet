@@ -26,17 +26,13 @@ select {
   background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e4/Ic_arrow_drop_down_36px.svg') 96% / 15% no-repeat #EEE;
 
 }
-select::after {
-    
-}
 
 body {
     background:rgba(51, 51, 51, 0.933);
-    
+    perspective:1000px;
 }
 
 button {
-
     outline:none;
     border:none;
     transition:0.2s ease;
@@ -50,23 +46,15 @@ button:hover {
 
 input { display:inline-block; }
 
-
-
-
-
 #container {
     font-family: 'Roboto Mono', monospace;
     display: flex;
     justify-content: center;
     color:white;
-    transform-style:preserve-3d;
 }
 
 .wrapper {
-    width:100%;
-}
-
-.wrapper {
+    margin:10px;
     width:100%;
     height:100%;
 }
@@ -198,11 +186,6 @@ text-align:right;
     flex-direction:column;
     width:100%;
 }
-
-.todo-panes section:nth-child(2) {
-
-}
-
 .divider {
     border-left:1px solid gray;
 }
@@ -287,10 +270,6 @@ text-align:right;
 
 .todo-controls-edit button:disabled {
     background:rgba(0, 0, 0, 0.296);
-}
-
-.controls {
-    
 }
 
 button {
@@ -388,10 +367,6 @@ button {
     font-size:10px;
 }
 
-.form a {
-
-}
-
 .login-submit {
     display:flex;
     justify-content: space-between;
@@ -451,6 +426,50 @@ button {
         transform: translateX(0);
     }
 }
+
+.loader-container {
+    width:100vw;
+    height:100vh;
+    display:flex;
+    z-index:9999;
+    position:absolute;
+    justify-content: center;
+    align-items:center;
+}
+.loader-box {
+    transition: all 2s ease;
+    transform-style: preserve-3d;
+}
+.loader-circle-one {
+    border: 10px solid #f3f3f3; /* Light grey */
+    border-top: 10px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    animation: spin 2s linear infinite;
+    background-color:black;
+  }
+  .loader-circle-two {
+    border: 4px solid #f3f3f3; /* Light grey */
+    border-top: 4px solid #3498db; /* Blue */
+    border-radius: 50%;
+
+    animation: spin 0.9s alternate infinite;
+    background-color:black;
+  }
+  .loader-circle-three {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #3498db; /* Blue */
+    border-radius: 50%;
+
+    animation: spin 0.9s linear infinite;
+    background-color:black;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 
 @media only screen and (max-width: 700px) {
     .todo-controls-left button {

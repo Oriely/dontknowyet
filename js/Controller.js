@@ -2,7 +2,7 @@
 function login(e, form) {
     e.preventDefault();
     
-    if(firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged((user) => {
         if(!user) {
             clearErrors();
 
@@ -22,20 +22,15 @@ function login(e, form) {
                     .catch((error) => {
                         const errorCode = error.code;
                         const errorMessage = error.message;
-
-                        errorHandler(fbErrors[errorCode]);
-
                         updateScreen();
-
-                    
+                        errorHandler(fbErrors[errorCode]);
                     });
             } else {
 
             }
         }
-    }))
+    });
     
-    updateScreen();
 }
 
 function signout() {
@@ -45,15 +40,16 @@ function signout() {
 
             firebase.auth().signOut().then(() => {
                 
-                updateScreen();
+               updateScreen();
 
             }).catch((error) => {
                 alert(error);
             });
-
             updateScreen();
         }
+        updateScreen();
     });
+    updateScreen();
 }
 
 
@@ -141,18 +137,10 @@ function register(e, form) {
                     const errorMessage = error.message;
 
                     errorHandler(fbErrors[errorCode]);
-
-                    updateScreen();
-
-                    
                 });
             }
-
-            updateScreen();
-            
         }
     });
-
 }
 
 function addTodo() {
@@ -175,18 +163,14 @@ function addTodo() {
                     })    
                     .then(function(docRef) {
                         response = 'Successfully added todo.'
-                        updateScreen();
+                        getData(user.uid);
                     })
                     .catch(function(err) {
 
                     });
-                
-                    updateScreen();
                 }
         }
     });
-
-    updateScreen();
 }
 
 
@@ -212,7 +196,7 @@ function editTodo(id) {
             }
         
         
-            updateScreen();
+            getData(user.uid);
         } else {
 
         }
@@ -221,7 +205,6 @@ function editTodo(id) {
 
 function completeTodo() {
     clearErrors();
-    updateScreen();
 }
 
 function removeTodo(todo_id) {
@@ -232,19 +215,21 @@ function removeTodo(todo_id) {
             db.collection('todos').doc(uid).collection('ongoing').doc(todo_id)
             .delete()
             .then(function() {
-                console.log('successfully removeTodo')
+                console.log('successfully removeTodo');
+                getData(uid);
             })
             .catch(err   => {
                 console.log(err);
             })
+
+    
         }
     });
-    updateScreen();
 }
 
 function changeViewmode(p) {
     model.app.todo_viewmode = p;
-    updateScreen() 
+    updateScreen();
 }
 
 function changeScreen(page) {
@@ -257,7 +242,7 @@ function changeScreen(page) {
 
 function selectCategory(selected_category) {
     model.inputs.todo_new.category = selected_category;
-    updateScreen();
+    updateScreen()
 }
 
 function validateEmail(email) {
@@ -270,28 +255,35 @@ function validateEmail(email) {
 
 }
 
-function createNewCategory(cat_name, cat_color) {
+function createNewCategory() {
     firebase.auth().onAuthStateChanged(function (user){
         if(user) {
-            db.collection('user_settings').doc(user.uid).update({
+            const uid = user.uid;
+            db.collection('user_settings').doc(uid).update({
                 todo_categories: firebase.firestore.FieldValue.arrayUnion({
-                    name: cat_name,
-                    color: cat_color
+                    name: model.inputs.new_category.name,
+                    color: model.inputs.new_category.color
                 })
             })
+            getData(uid);
         }
     })
 }
 
 function removeCategory(cat_name, cat_color) {
+    console.log(cat_name, cat_color)
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
-            db.collection('user_settings').doc(user.uid).update({
+            const uid = user.uid;
+            db.collection('user_settings').doc(uid).update({
                 todo_categories: firebase.firestore.FieldValue.arrayRemove({
                     name: cat_name,
                     color: cat_color
                 })
-            })
+            }).catch((error) => {
+                console.log(error)
+            });
+            getData(uid);
         }
-    })
+    });
 }

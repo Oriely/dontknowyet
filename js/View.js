@@ -5,7 +5,7 @@ function loginScreen() {
                 error += err + '<br>';
             });
 
-            return container.innerHTML = `
+            container.innerHTML = `
             <div class="wrapper">
     
                 <div class="login">
@@ -102,17 +102,17 @@ function registerScreen() {
 function mainScreen() {
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
+            
+            let html = '';
+
             errors.forEach((err) => {
                 error += err + '<br>';
             });
+
+            html += `
             
-
-
-
-            
-
-            container.innerHTML = `
-                <div class="wrapper pad">
+                <div class="wrapper">
+                
                     <nav>
                         <div class="navigation">
                             <ul>
@@ -140,7 +140,12 @@ function mainScreen() {
                             <div class="todo-controls-left">
                                 <div><button onclick="addTodo()">Add todo</button></div>
                                 <div class="categories">
-                                    $   
+                                `;
+                                model.data.user.settings.todo_categories.forEach(cat => {
+                                    html += categoryCreate(cat.name, cat.color)
+                                }); 
+
+                            html += `
                                 </div>
                             </div>
                             <div class="todo-controls-right">
@@ -164,16 +169,20 @@ function mainScreen() {
                     </div>
 
                     <div class="todo-${model.app.todo_viewmode}">
-                        ${model.tmpHTML.todos}
-                        
-                    </div>
+            `;
+                for(const todo in model.data.user.todos) {
+                    html += todoCreateHTML(model.data.user.todos[todo], todo)
+                }
+
+                html += `
+                </div>
                 </div>
                 `;
+                container.innerHTML = html;
         }
     });
 
-
-
+    
 }
 
 /* <select name="cars" id="cars" onchange="filterTodos(this)">
@@ -190,8 +199,9 @@ function configScreen() {
         });
 
         if(user) {
-            container.innerHTML = `
-            <div class="wrapper pad">
+            let html = '';
+            html += `
+            <div class="wrapper">
                 <nav>
                     <div class="navigation">
                         <ul>
@@ -201,34 +211,69 @@ function configScreen() {
                     </div>
                     <div><button onclick="signout()" title="Sign out"><i class="fas fa-sign-out-alt"></i></button></div>
                 </nav>
-            </div>
-            <div class="testing">
+                <div class="testing">
+            
+            `;
 
+            model.data.user.settings.todo_categories.forEach(cat => {
+                html += `
+                    <div>
+
+                        ${(!model.inputs.edit_category.edit ? '<p>'+ cat.name+ '</p>' : '<input type="te"')}
+                        ${(!model.inputs.edit_category.edit ? '<p style="background-color:'+ cat.color + '">'+ cat.color + '</p>' : '<input data-jscolor="{value:\''+ cat.color + '\'}">')}
+                        <button onclick="editCategory('${cat.name}')">Edit</button>
+                        <button onclick="removeCategory('${cat.name}','${cat.color}')">remove category</button>
+                    </div>
+                `;
+            });
+
+            html += `
+                <label>Category name:</label>
+                <input oninput="model.inputs.new_category.name = this.value" type="text">
+                <label>Category color:</label>
+                <input onchange="model.inputs.new_category.color = this.value" data-jscolor="{value:'rgba(51,153,255,0.5)', position:'bottom', height:80, backgroundColor:'#333',
+                palette:'rgba(0,0,0,0) #fff #808080 #000 #996e36 #f55525 #ffe438 #88dd20 #22e0cd #269aff #bb1cd4',
+                paletteCols:11, hideOnPaletteClick:true}">
+                <button onclick="createNewCategory()">Create new category</button>
+                `;
+
+
+            html += `
+            </div>
             </div>
             `;
+
+            
+            container.innerHTML = html;
+            jscolor.install()
         }
 
 
     })
 }
 
+function getcolorpicker() {
+    return ``
+     // recognizes new inputs and installs jscolor on them
+}
+
 
 function todoCreateHTML(data, id) {
     return `
-    <div class="todo-wrapper" data-key="${id}" style="background-color: ">
-        <div class="todo-title">${(mode == 'edit' && id == selectedToEdit ? '<input class="edit" type="text" onkeyup="model.inputs.todo_edit.title = this.value" value="' + data.title +'">' : '<h1>' + data.title + '</h1>')}</div>
-        <div class="todo-dates">
-            <span>Added: ${data.date_added}</span>
-            <span>${(data.date_finished != '' ? 'Completed: ' + data.date_finished : '')}</span>
-            <span>${(data.date_edited != '' ? 'Edited: ' + data.date_edited : '')}</span>
+    <div class="todo-wrapper" data-key="${id}" style="background-color: ${getCategory(data.category)}">
+        <div class="todo-title">${(model.app.edit_mode == 'edit' && id == model.inputs.todo_edit.selectedToEdit ? '<input class="edit" type="text" onkeyup="model.inputs.todo_edit.title = this.value" value="' + data.title +'">' : '<h1>' + data.title + '</h1>')}</div>
+        <div class="todo-dates"> 
+            <span>Added: ${actuallyReadableDate(data.date_created)}</span>
+            <span>${(data.date_finished != '' ? 'Completed: ' + actuallyReadableDate(data.date_finished) : '')}</span>
+            <span>${(data.date_edited != '' ? 'Edited: ' + actuallyReadableDate(data.date_edited) : '')}</span>
         </div>
         <div class="todo-content">  
-            ${(mode == 'edit' && id == selectedToEdit ? '<textarea class="edit" onkeyup="model.inputs.todo_edit.content = this.value">'+ data.content + '</textarea>' : data.content)}
+            ${(model.app.edit_mode == 'edit' && id == selectedToEdit ? '<textarea class="edit" onkeyup="model.inputs.todo_edit.content = this.value">'+ data.content + '</textarea>' : data.content)}
             <br>
             <div class="pri">PRI: ${data.category}</div>
         </div>
         <div class="todo-controls-edit">
-            ${(data.completed == true ? '' : '<button '+ (id != selectedToEdit && model.app.edit_mode === true ? 'disabled ' : '') + 'onclick="editTodo(\''+ id +'\')">' + (id == selectedToEdit ? (model.app.edit_mode === true ? 'Save' : 'Edit') : 'Edit') + '</button>')}
+            ${(data.completed == true ? '' : '<button '+ (id != model.inputs.todo_edit.selectedToEdit && model.app.edit_mode === true ? 'disabled ' : '') + 'onclick="editTodo(\''+ id +'\')">' + (id == model.inputs.todo_edit.selectedToEdit1 ? (model.app.edit_mode === true ? 'Save' : 'Edit') : 'Edit') + '</button>')}
             ${(data.completed == false ? '<button onclick="completeTodo(\''+id+'\');">Complete</button>' : '')}
    
             <button onclick="removeTodo('${id}')">Remove</button>
@@ -240,4 +285,13 @@ function todoCreateHTML(data, id) {
 
 function categoryCreate(cat_name, cat_color) {
     return '<div onclick="selectCategory(\'' + cat_name + '\')" class="category-item" ><span class="color-preview ' + (model.inputs.todo_new.category == cat_name ? 'selected-category' : '') + '" style="background-color: '+ cat_color + '"></span><p>'+ cat_name +'</p></div>';
+}
+
+function getCategory(cat) {
+    for(let x = 0; x < model.data.user.settings.todo_categories.length; x++) {
+        if(model.data.user.settings.todo_categories[x].name == cat) {
+           
+            return model.data.user.settings.todo_categories[x].color;
+        }
+    }
 }
