@@ -4,7 +4,7 @@ let model = {
     app: {
         pages: ['login', 'register', 'main', 'config', 'stats'],
         on_page: 'login',
-        todo_viewmode: 'panes',
+        todo_viewmode: 'list',
         edit_mode: false,
         mobile: false,
 

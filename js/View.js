@@ -194,10 +194,11 @@ function mainScreen() {
 
 function configScreen() {
     firebase.auth().onAuthStateChanged((user) => {
-        errors.forEach((err) => {
-            error += err + '<br>';
-        });
-
+        if(errors.length > 0) {
+            errors.forEach((err) => {
+                error += err + '<br>';
+            });    
+        }
         if(user) {
             let html = '';
             html += `
