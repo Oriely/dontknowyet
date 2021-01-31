@@ -311,8 +311,7 @@ button {
 
 
 .selected-category {
-    opacity:0.3;
-    transition:1s ease;
+    opacity:0.9;
 }
 
 .login {

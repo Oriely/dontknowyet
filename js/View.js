@@ -105,9 +105,9 @@ function mainScreen() {
             
             let html = '';
 
-            errors.forEach((err) => {
-                error += err + '<br>';
-            });
+            for(let x = 0; x < errors.length; x++) {
+                error += errors[x];
+            }
 
             html += `
             
@@ -133,20 +133,23 @@ function mainScreen() {
                     <div class="input-form">
                         <div class="input-title"><input id="" type="text" onkeyup="model.inputs.todo_new.title = this.value" value="${model.inputs.todo_new.title}" placeholder="Some title...."></div>
                         <div class="input-content"><textarea onkeyup="model.inputs.todo_new.content = this.value" value="">${model.inputs.todo_new.content}</textarea></div>
-                        ${(error ? '<div class="errors  ">'+ error +'</div>' : '')} 
+                        ${(error ? '<div class="errors">'+ error +'</div>' : '')} 
                         ${(response ? '<div class="response">' + response + '</div>' : '')}
                         <div class="todo-controls">
 
                             <div class="todo-controls-left">
-                                <div><button onclick="addTodo()">Add todo</button></div>
                                 <div class="categories">
                                 `;
-                                model.data.user.settings.todo_categories.forEach(cat => {
-                                    html += categoryCreate(cat.name, cat.color)
-                                }); 
+                                for(let i = 0; i < model.data.user.settings.todo_categories.length; i++) {
+                                    const cat_name = model.data.user.settings.todo_categories[i].name;
+                                    const cat_color = model.data.user.settings.todo_categories[i].color;
+                                    html += categoryCreate(cat_name, cat_color)
+                                }
 
                             html += `
+                            
                                 </div>
+                                <div><button onclick="addTodo()">Add todo</button></div>
                             </div>
                             <div class="todo-controls-right">
                             <div class="todo-filter">
@@ -261,7 +264,7 @@ function todoCreateHTML(data, id) {
         <div class="todo-title">${(model.app.edit_mode == 'edit' && id == model.inputs.todo_edit.selectedToEdit ? '<input class="edit" type="text" onkeyup="model.inputs.todo_edit.title = this.value" value="' + data.title +'">' : '<h1>' + data.title + '</h1>')}</div>
         <div class="todo-dates"> 
             <span>Added: ${actuallyReadableDate(data.date_created)}</span>
-            <span>${(data.date_finished != '' ? 'Completed: ' + actuallyReadableDate(data.date_finished) : '')}</span>
+            <span>${(data.date_completed != '' ? 'Completed: ' + actuallyReadableDate(data.date_completed) : '')}</span>
             <span>${(data.date_edited != '' ? 'Edited: ' + actuallyReadableDate(data.date_edited) : '')}</span>
         </div>
         <div class="todo-content">  
@@ -281,7 +284,7 @@ function todoCreateHTML(data, id) {
 
 
 function categoryCreate(cat_name, cat_color) {
-    return '<div onclick="selectCategory(\'' + cat_name + '\')" class="category-item" ><span class="color-preview ' + (model.inputs.todo_new.category == cat_name ? 'selected-category' : '') + '" style="background-color: '+ cat_color + '"></span><p>'+ cat_name +'</p></div>';
+    return '<div onclick="selectCategory(\'' + cat_name + '\')" class="category-item" ><span class="color-preview ' + (model.inputs.todo_new.category == cat_name ? 'selected-category' : '') + '" style="background-color: '+ cat_color + ';"></span><p>' + (model.inputs.todo_new.category == cat_name ? '<u>' + cat_name + '</u>' : cat_name) + '</p></div>';
 }
 
 function getCategory(cat) {

@@ -75,8 +75,6 @@ function register(e, form) {
         
             if(password_comf != password) { errorHandler('Comfirm password is not same as password.') }
         
-            if (!firstname || !lastname) { errorHandler('You need to type in your first and last name.')} 
-        
             if(!username) {errorHandler('You need to type in a username')}
         
             if(!validateEmail(email)) { errorHandler('Thats not a valid email address');}
@@ -85,7 +83,7 @@ function register(e, form) {
         
             if(password.length < 8) { errorHandler('Passwords has to be 8 characters long or more'); }
 
-            if(validateEmail(email) && password.length >= 8 && firstname && lastname && password_comf === password) {
+            if(validateEmail(email) && password.length >= 8 && password_comf === password) {
                 firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((response) => {
                     const uid = response.user.uid
@@ -94,7 +92,6 @@ function register(e, form) {
                         username: username,
                         firstname:  firstname.toLowerCase(),
                         lastname: lastname.toLowerCase(),
-                        groups: ['user'],
                         email,
                         date_registered: Date.now()
                     }
@@ -149,13 +146,14 @@ function addTodo() {
                 clearErrors();
 
                 if (!model.inputs.todo_new.title || !model.inputs.todo_new.content || !model.inputs.todo_new.category) {
-                    errorHandler('eh');
+                    errorHandler('Please type in something.');
+                    updateScreen();
                 } else {   
                     // Add a new document with a generated id.
                     db.collection("todos").doc(user.uid).collection('ongoing').add({
                         date_created: Date.now(),
                         date_edited: '',
-                        date_finished: '',
+                        date_completed: '',
                         title: model.inputs.todo_new.title,
                         content: model.inputs.todo_new.content,
                         category: model.inputs.todo_new.category,
@@ -163,10 +161,15 @@ function addTodo() {
                     })    
                     .then(function(docRef) {
                         response = 'Successfully added todo.'
+                        model.inputs.todo_new.title = '';
+                        model.inputs.todo_new.content = '';
+                        model.inputs.todo_new.category = '';
                         getData(user.uid);
                     })
                     .catch(function(err) {
 
+                        errorHandler(err);
+                        updateScreen();
                     });
                 }
         }
@@ -203,8 +206,36 @@ function editTodo(id) {
     });
 }
 
-function completeTodo() {
+function completeTodo(key) {
+
     clearErrors();
+    let data;
+    firebase.auth().onAuthStateChanged(function (user) {
+        const uid = user.uid;
+        if(key) { 
+            const docRef = db.collection('todos').doc(uid).collection('ongoing').doc(key);
+            docRef.get()
+            .then((doc) => {
+                if(doc.exists) {
+                    data = doc.data();
+                    data.date_completed = Date.now();
+                    db.collection("todos").doc(user.uid).collection('completed').add(data)    
+                    .then(function(docRef) {
+                        response = 'Nice! you completed a todo.'
+                    });
+                    db.collection("todos").doc(uid).collection('ongoing').doc(key).delete().then(function() {
+                        console.log("Document successfully deleted!");
+                    }).catch(function(error) {
+                        console.error("Error removing document: ", error);
+                    });
+                    
+                    getData();
+                }
+            });
+            
+
+        }
+    });
 }
 
 function removeTodo(todo_id) {
@@ -286,4 +317,9 @@ function removeCategory(cat_name, cat_color) {
             getData(uid);
         }
     });
+}
+
+function editCategory(cat) {
+    model.inputs.edit_category.selectedToEdit = cat;
+    updateScreen();
 }
