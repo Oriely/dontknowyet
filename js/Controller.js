@@ -22,7 +22,6 @@ function login(e, form) {
                     .catch((error) => {
                         const errorCode = error.code;
                         const errorMessage = error.message;
-                        updateScreen();
                         errorHandler(fbErrors[errorCode]);
                     });
             } else {
@@ -82,6 +81,8 @@ function register(e, form) {
             if(!password) { errorHandler('Please type in a password and comfirm it.')}
         
             if(password.length < 8) { errorHandler('Passwords has to be 8 characters long or more'); }
+            
+            updateScreen();
 
             if(validateEmail(email) && password.length >= 8 && password_comf === password) {
                 firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -127,13 +128,15 @@ function register(e, form) {
                         .set(default_settings)
                         .catch((err) => {
                             console.log(err);
-                        })
+                        });
+                    model.app.on_page = 'main';
                 })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
-
+                    console.log('asdasd')
                     errorHandler(fbErrors[errorCode]);
+                    updateScreen();
                 });
             }
         }
@@ -272,6 +275,7 @@ function changeScreen(page) {
 }
 
 function selectCategory(selected_category) {
+    clearErrors();
     model.inputs.todo_new.category = selected_category;
     updateScreen()
 }

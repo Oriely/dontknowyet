@@ -12,8 +12,12 @@ let model = {
 
     data: {
         user: {
+            info: {
+                
+            },
             todos: {
-
+                ongoing: {},
+                completed: {} 
             },
             settings: {}
         }
@@ -76,22 +80,39 @@ async function getData(uid) {
             </div>
         </div>
         `;
-        const dbTodoRef = db.collection('todos').doc(uid).collection('ongoing');
-        const todoData = await dbTodoRef.get();
-        const dbSettingsRef = db.collection('user_settings').doc(uid);
-        const userSettings = await dbSettingsRef.get();
-        model.data.user.todos = [];
+        const todos = db.collection('todos').doc(uid);
 
-        for(const test of todoData.docs) {
-            model.data.user.todos[test.id] = test.data();
+        const ongoingTodos = await todos.collection('ongoing').get();
+        
+        const completedTodos = await todos.collection('completed').get();
+        
+        console.log(ongoingTodos.size);
+        console.log(completedTodos.size);
+
+        for(const doc of ongoingTodos.docs) {
+            model.data.user.todos.ongoing[doc.id] = doc.data();
         }
 
-        model.data.user.settings = userSettings.data();
+      
+        
+        const dbSettingsRef = db.collection('user_settings').doc(uid);
+        const userSettings = await dbSettingsRef.get();
+        if(userSettings.data()) {
+            console.log('test')
+            model.data.user.settings = userSettings.data();
+        } else {
+            errorHandler('Did not find user settigns.');
+        }
+
+
+        
+        
+        
+
         updateScreen();
     }
     catch (error) {
         console.log(error);
-        updateScreen();
     }
 
 

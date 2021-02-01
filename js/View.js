@@ -6,7 +6,7 @@ function loginScreen() {
             });
 
             container.innerHTML = `
-            <div class="wrapper">
+            <div class="wrapper">spoqwkdpoqwkd
     
                 <div class="login">
     
@@ -33,6 +33,7 @@ function loginScreen() {
     
             </div>   
         `;
+            
         } 
     });
     
@@ -44,6 +45,7 @@ function registerScreen() {
         if (!user) {
 
             errors.forEach((err) => {
+                console.log('lol')
                 error += err + '<br>';
             });
 
@@ -140,10 +142,14 @@ function mainScreen() {
                             <div class="todo-controls-left">
                                 <div class="categories">
                                 `;
-                                for(let i = 0; i < model.data.user.settings.todo_categories.length; i++) {
-                                    const cat_name = model.data.user.settings.todo_categories[i].name;
-                                    const cat_color = model.data.user.settings.todo_categories[i].color;
-                                    html += categoryCreate(cat_name, cat_color)
+                                if(model.data.settings != {}) {
+                                    for(let i = 0; i < model.data.user.settings.todo_categories.length; i++) {
+                                        const cat_name = model.data.user.settings.todo_categories[i].name;
+                                        const cat_color = model.data.user.settings.todo_categories[i].color;
+                                        html += categoryCreate(cat_name, cat_color)
+                                    }
+                                } else {
+                                    console.log(0)
                                 }
 
                             html += `
@@ -173,8 +179,8 @@ function mainScreen() {
 
                     <div class="todo-${model.app.todo_viewmode}">
             `;
-                for(const todo in model.data.user.todos) {
-                    html += todoCreateHTML(model.data.user.todos[todo], todo)
+                for(const todo in model.data.user.todos.ongoing) {
+                    html += todoCreateHTML(model.data.user.todos.ongoing[todo], todo)
                 }
 
                 html += `
