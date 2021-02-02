@@ -23,6 +23,12 @@ let model = {
         }
     },
     inputs: {
+        // register: {
+        //     firstname: '',
+        //     lastname: '',
+        //     ''
+        // },
+
         todo_new: {
             title: '',
             category: '',
@@ -45,7 +51,7 @@ let model = {
             name: '',
             color: ''
         }
-    },
+    }
 
 }
 
@@ -86,22 +92,19 @@ async function getData(uid) {
         
         const completedTodos = await todos.collection('completed').get();
         
-        console.log(ongoingTodos.size);
-        console.log(completedTodos.size);
-
         for(const doc of ongoingTodos.docs) {
-            model.data.user.todos.ongoing[doc.id] = doc.data();
-        }
 
-      
+            model.data.user.todos.ongoing[doc.id] = doc.data(); // TODO pagination? make new array of objects for every "20" todo modulo for loop --Scratched--
+        }
         
         const dbSettingsRef = db.collection('user_settings').doc(uid);
+
+        
         const userSettings = await dbSettingsRef.get();
         if(userSettings.data()) {
-            console.log('test')
             model.data.user.settings = userSettings.data();
         } else {
-            errorHandler('Did not find user settigns.');
+            errorHandler('Did not find user settigns.');     
         }
 
 
@@ -123,3 +126,15 @@ function actuallyReadableDate(date) {
     return pre.toISOString();
 }
 
+
+
+let user1 = 'sigve';
+let user2 = '123123123';
+
+let documenttt=  user1 + '-' + user2;
+
+console.log('orig ', documenttt)
+
+let test = documenttt.split('-').reverse().join();
+
+console.log(test);

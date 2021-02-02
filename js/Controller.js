@@ -21,8 +21,7 @@ function login(e, form) {
                     })
                     .catch((error) => {
                         const errorCode = error.code;
-                        const errorMessage = error.message;
-                        errorHandler(fbErrors[errorCode]);
+                        errorHandler(fbErrors[errorCode]);// TODO fiks
                     });
             } else {
 
@@ -133,7 +132,6 @@ function register(e, form) {
                 })
                 .catch((error) => {
                     const errorCode = error.code;
-                    const errorMessage = error.message;
                     console.log('asdasd')
                     errorHandler(fbErrors[errorCode]);
                     updateScreen();
@@ -212,33 +210,41 @@ function editTodo(id) {
 function completeTodo(key) {
 
     clearErrors();
+
     let data;
+
     firebase.auth().onAuthStateChanged(function (user) {
         const uid = user.uid;
-        if(key) { 
-            const docRef = db.collection('todos').doc(uid).collection('ongoing').doc(key);
-            docRef.get()
-            .then((doc) => {
-                if(doc.exists) {
-                    data = doc.data();
-                    data.date_completed = Date.now();
-                    db.collection("todos").doc(user.uid).collection('completed').add(data)    
-                    .then(function(docRef) {
-                        response = 'Nice! you completed a todo.'
-                    });
-                    db.collection("todos").doc(uid).collection('ongoing').doc(key).delete().then(function() {
-                        console.log("Document successfully deleted!");
-                    }).catch(function(error) {
-                        console.error("Error removing document: ", error);
-                    });
-                    
-                    getData();
-                }
-            });
-            
+        if (user) {
+            if(key) { 
+                data = model.data.user.todos.ongoing[key];
 
+                data.date_completed = Date.now();
+    
+                db.collection("todos").doc(uid).collection('ongoing').doc(key).delete().then(function() {
+    
+                    console.log("Document successfully deleted!");
+    
+                }).catch(function(error) {
+    
+                    console.error("Error removing document: ", error);
+    
+                });
+    
+                db.collection("todos").doc(user.uid).collection('completed').add(data)    
+                .then(function(docRef) {
+                    response = 'Nice! you completed a todo.';
+                })
+                .catch( (err) => {
+                    console.log(err);
+                });
+    
+                
+                getData(uid);
+            }
         }
     });
+            
 }
 
 function removeTodo(todo_id) {

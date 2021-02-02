@@ -142,14 +142,20 @@ function mainScreen() {
                             <div class="todo-controls-left">
                                 <div class="categories">
                                 `;
-                                if(model.data.settings != {}) {
-                                    for(let i = 0; i < model.data.user.settings.todo_categories.length; i++) {
-                                        const cat_name = model.data.user.settings.todo_categories[i].name;
-                                        const cat_color = model.data.user.settings.todo_categories[i].color;
-                                        html += categoryCreate(cat_name, cat_color)
-                                    }
-                                } else {
-                                    console.log(0)
+                                if(Object.keys(model.data.user.settings).length != 0 ) {
+                                    if(model.data.user.settings.todo_categories.length === 0) {
+                                        html += 'No categories found. Please create one to add todos.';
+                             
+                                    } else {
+                                        for(let i = 0; i < model.data.user.settings.todo_categories.length; i++) {
+                                            const cat_name = model.data.user.settings.todo_categories[i].name;
+                                            const cat_color = model.data.user.settings.todo_categories[i].color;
+                                            html += categoryCreate(cat_name, cat_color)
+                                        }
+                                        
+                                        }
+                                    
+                                    
                                 }
 
                             html += `
@@ -181,7 +187,7 @@ function mainScreen() {
             `;
                 for(const todo in model.data.user.todos.ongoing) {
                     html += todoCreateHTML(model.data.user.todos.ongoing[todo], todo)
-                }
+                } // TODO pagination maybe???
 
                 html += `
                 </div>
@@ -237,7 +243,7 @@ function configScreen() {
                 <label>Category name:</label>
                 <input oninput="model.inputs.new_category.name = this.value" type="text">
                 <label>Category color:</label>
-                <input onchange="model.inputs.new_category.color = this.value" data-jscolor="{value:'rgba(51,153,255,0.5)', position:'bottom', height:80, backgroundColor:'#333',
+                <input onchange="model.inputs.new_category.color = this.value" data-jscolor="{value:'', position:'bottom', height:80, backgroundColor:'#333',
                 palette:'rgba(0,0,0,0) #fff #808080 #000 #996e36 #f55525 #ffe438 #88dd20 #22e0cd #269aff #bb1cd4',
                 paletteCols:11, hideOnPaletteClick:true}">
                 <button onclick="createNewCategory()">Create new category</button>
@@ -247,6 +253,24 @@ function configScreen() {
             html += `
             </div>
             </div>
+            `;
+
+            
+            container.innerHTML = html;
+            jscolor.install()
+        }
+
+
+    })
+}
+
+function historyScreen() {
+    firebase.auth().onAuthStateChanged((user) => {
+
+        if(user) {
+            let html = '';
+            html += `
+
             `;
 
             
@@ -294,10 +318,13 @@ function categoryCreate(cat_name, cat_color) {
 }
 
 function getCategory(cat) {
-    for(let x = 0; x < model.data.user.settings.todo_categories.length; x++) {
-        if(model.data.user.settings.todo_categories[x].name == cat) {
-           
-            return model.data.user.settings.todo_categories[x].color;
+    console.log(cat)
+    if(cat) {
+        for(let x = 0; x < model.data.user.settings.todo_categories.length; x++) {
+            if(model.data.user.settings.todo_categories[x].name == cat) {
+                
+                return model.data.user.settings.todo_categories[x].color;
+            }
         }
-    }
+    } else return '';
 }
