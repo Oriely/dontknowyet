@@ -10,10 +10,6 @@ function login(e, form) {
             
             let password = form['login-password'].value;
         
-            if(!email || !password) {
-                errorHandler('Please type in email and password.'); 
-            }
-        
             if (email && password) {
                 firebase.auth().signInWithEmailAndPassword(email, password)
                     .then((user) => {
@@ -25,7 +21,8 @@ function login(e, form) {
                         updateScreen();
                     });
             } else {
-
+                errorHandler('Please type in email and password.');
+                updateScreen();
             }
         }
     });
@@ -36,6 +33,7 @@ async function signout() {
     clearErrors();
     await firebase.auth().signOut();
     model.app.on_page = '';
+    updateScreen();
 }
 
 

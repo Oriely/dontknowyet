@@ -4,6 +4,7 @@ firebase.auth().onAuthStateChanged((user) => {
         getData(user.uid);
     }
     if(!user) {
+        if(model.app.on_page == '') {model.app.on_page = 'login'}
         updateScreen();
     }
 });
