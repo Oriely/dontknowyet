@@ -2,7 +2,7 @@
 let db = firebase.firestore();
 let model = {
     app: {
-        pages: ['login', 'register', 'main', 'config', 'stats'],
+        pages: ['login', 'register', 'main', 'config', 'history', 'chat'],
         on_page: 'login',
         todo_viewmode: 'list',
         edit_mode: false,
@@ -128,13 +128,4 @@ function actuallyReadableDate(date) {
 
 
 
-let user1 = 'sigve';
-let user2 = '123123123';
 
-let documenttt=  user1 + '-' + user2;
-
-console.log('orig ', documenttt)
-
-let test = documenttt.split('-').reverse().join();
-
-console.log(test);

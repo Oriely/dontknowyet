@@ -1,3 +1,27 @@
+function navbar(css) {
+
+    return `
+        <nav ${(css ? 'class="'+ css +'"' : '')}>
+            <div class="navigation">
+                <ul>
+                    <li><a onclick="changeScreen('main')">Main</a></li>
+                    <li><a onclick="changeScreen('history')">History</a></li>
+                    <li><a onclick="changeScreen('chat')">Chat</a></li>
+                    <li><a onclick="changeScreen('config')">Configuration</a></li>
+                </ul>
+            </div>
+            <div>
+                <button ${(model.app.mobile === true ? 'disabled' : '')} 
+                class="switch" onclick="changeViewmode('${(model.app.todo_viewmode === 'panes' ? 'list' : 'panes')}')">
+                ${(model.app.todo_viewmode === 'panes' ? '<i class="fas fa-stream"></i>' : '<i class="fas fa-columns"></i>')}
+                </button>
+                <button onclick="signout()" title="Sign out"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+
+        </nav>
+    `;
+}
+
 function loginScreen() {
     firebase.auth().onAuthStateChanged((user) => {
         if (!user) {
@@ -6,8 +30,8 @@ function loginScreen() {
             });
 
             container.innerHTML = `
-            <div class="wrapper">spoqwkdpoqwkd
-    
+            <div class="wrapper">
+            
                 <div class="login">
     
                     <form class="form" onsubmit="login(event, this)">
@@ -115,22 +139,7 @@ function mainScreen() {
             
                 <div class="wrapper">
                 
-                    <nav>
-                        <div class="navigation">
-                            <ul>
-                                <li><a onclick="changeScreen('main')">Main</a></li>
-                                <li><a onclick="changeScreen('config')">Configuration</a></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <button ${(model.app.mobile === true ? 'disabled' : '')} 
-                            class="switch" onclick="changeViewmode('${(model.app.todo_viewmode === 'panes' ? 'list' : 'panes')}')">
-                            ${(model.app.todo_viewmode === 'panes' ? '<i class="fas fa-stream"></i>' : '<i class="fas fa-columns"></i>')}
-                            </button>
-                            <button onclick="signout()" title="Sign out"><i class="fas fa-sign-out-alt"></i></button>
-                        </div>
-
-                    </nav>
+                    ${navbar()}
 
                     <div class="input-form">
                         <div class="input-title"><input id="" type="text" onkeyup="model.inputs.todo_new.title = this.value" value="${model.inputs.todo_new.title}" placeholder="Some title...."></div>
@@ -214,15 +223,7 @@ function configScreen() {
             let html = '';
             html += `
             <div class="wrapper">
-                <nav>
-                    <div class="navigation">
-                        <ul>
-                            <li><a onclick="changeScreen('main')">Main</a></li>
-                            <li><a onclick="changeScreen('config')">Configuration</a></li>
-                        </ul>
-                    </div>
-                    <div><button onclick="signout()" title="Sign out"><i class="fas fa-sign-out-alt"></i></button></div>
-                </nav>
+                ${navbar()}
                 <div class="testing">
             
             `;
@@ -269,17 +270,57 @@ function historyScreen() {
 
         if(user) {
             let html = '';
-            html += `
 
+            html += `
+            <div class="wrapper">
+                ${navbar()}
+            </div>
             `;
 
             
             container.innerHTML = html;
-            jscolor.install()
         }
 
 
     })
+}
+
+function chatScreen() {
+    firebase.auth().onAuthStateChanged((user) => {
+        if(user) {
+            let html = '';
+
+            html += `
+                <div class="wrapper chat">
+            `;
+            html += navbar('navbar-chat-fix');
+
+            html += '<div class="chat-messages">';
+            let x = 0
+            while(x != 20){
+                x++
+                html += `<div class="message-wrapper">
+                <label class="message-username">Johnny96:</label>
+                <div class="message-text">powkfpowekfpowkefpokwepk</div>
+                </div>`
+            }
+            html += '</div>'
+            html += `
+                <div class="chat-input">
+                    <div><input onkeypress="sendChatMessage(event, this.value)"  type="text"><button>Send</button></div>
+
+                </div>
+            `;
+
+            html += `
+                </div>
+            `;
+
+            
+            container.innerHTML = html;
+
+        }
+    });
 }
 
 function getcolorpicker() {

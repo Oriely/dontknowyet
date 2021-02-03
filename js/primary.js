@@ -3,9 +3,11 @@ firebase.auth().onAuthStateChanged((user) => {
         getData(user.uid);
     }
     if(!user) {
-        updateScreen(); 
+        updateScreen();
     }
 });
+
+
 function updateScreen() {
 
     firebase.auth().onAuthStateChanged((user) => {
@@ -13,18 +15,23 @@ function updateScreen() {
             
             mainScreen();
 
-
-
-            if (model.app.on_page == 'config') {
-                configScreen();
-            }
         
             if (model.app.on_page == 'main') {
                 mainScreen();
             }
-            if (model.app.on_page == 'main') {
-                mainScreen();
+
+            if (model.app.on_page == 'history') {
+                historyScreen();
             }
+
+            if (model.app.on_page == 'chat') {
+                chatScreen();
+            }
+
+            if (model.app.on_page == 'config') {
+                configScreen();
+            }
+            
             if(!model.app.on_page) {
                 mainScreen();
         

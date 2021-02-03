@@ -31,23 +31,10 @@ function login(e, form) {
     
 }
 
-function signout() {
-    firebase.auth().onAuthStateChanged((user) => {
-        if(user) {
-            clearErrors();
-
-            firebase.auth().signOut().then(() => {
-                
-               updateScreen();
-
-            }).catch((error) => {
-                alert(error);
-            });
-            updateScreen();
-        }
-        updateScreen();
-    });
-    updateScreen();
+async function signout() {
+    clearErrors();
+    await firebase.auth().signOut();
+    model.app.on_page = '';
 }
 
 

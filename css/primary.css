@@ -9,6 +9,7 @@
 
 textarea { resize: vertical; display:block;}
 
+
 *,
 *::before,
 *::after {
@@ -25,6 +26,11 @@ select {
     padding:2px;
   background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e4/Ic_arrow_drop_down_36px.svg') 96% / 15% no-repeat #EEE;
 
+}
+
+input {
+
+    padding: 10px;
 }
 
 body {
@@ -79,6 +85,7 @@ nav ul li a {
     padding:10px;
     display:block;
     background:rgba(140, 140, 140, 0.385);
+    text-transform: uppercase;
     
 }
 
@@ -86,7 +93,6 @@ nav ul li a {
 
 
 .input-form input {
-    padding: 10px;
     border:none;
 }
 
@@ -348,7 +354,7 @@ button {
 
 .form input[type=submit] {
     width:auto;
-    background:rgba(0, 0, 0, 0.693);
+    background:rgba(9, 9, 9, 0.693);
     border:none;
     color:white;
 }
@@ -404,6 +410,66 @@ button {
     -moz-animation: slideIn 0.5s forwards;
     animation: slideIn 0.5s forwards;
     color:white;
+}
+
+.chat {
+    margin:0;
+    height:100vh;
+    overflow-y:hidden;
+}
+
+html {
+}
+
+.navbar-chat-fix {
+    position:absolute;
+    padding:10px;
+    width:100vw;
+}
+
+.chat-messages {
+    height:100vh;
+    overflow-y:scroll;
+    margin-bottom:10px;
+}
+
+.message-wrapper {
+    display:flex;
+}
+
+.message-username {
+    padding:5px;
+    margin:5px;
+    background:green;
+    border-radius: 5px;
+}
+
+.message-text {
+    padding:5px;
+}
+
+.message-wrapper:nth-child(odd) {
+    background-color:#00000043;
+}
+
+.message-wrapper:nth-child(even) {
+    background-color:#00000054;
+}
+
+
+.chat-input {
+    position:absolute;
+    bottom:0;
+    left:0;
+}
+
+
+.chat-input input {
+    width:100%;
+}
+
+.chat-input > div {
+    display:flex;
 }
 
 @keyframes slideInError {
