@@ -22,6 +22,7 @@ function login(e, form) {
                     .catch((error) => {
                         const errorCode = error.code;
                         errorHandler(fbErrors[errorCode]);// TODO fiks
+                        updateScreen();
                     });
             } else {
 
