@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -14,6 +14,7 @@ textarea { resize: vertical; display:block;}
 *::before,
 *::after {
   box-sizing: border-box;
+  font-family: 'Lato', sans-serif
 }
 select {
     -webkit-appearance: none;
@@ -42,21 +43,24 @@ button {
     outline:none;
     border:none;
     transition:0.2s ease;
-    background:rgba(0, 0, 0, 0.481);
+    background:rgb(31, 31, 31);
     color:white;
+    border-radius:2px;
+    padding: 10px;
+    font-size:11px;
 }
 
 button:hover {
-    background:rgba(0, 0, 0, 0.289);
+    background:black;
 }
 
-input { display:inline-block; }
 
 #container {
     font-family: 'Roboto Mono', monospace;
     display: flex;
     justify-content: center;
     color:white;
+    min-height:100vh;
 }
 
 .wrapper {
@@ -69,7 +73,7 @@ nav {
     padding-bottom:10px;
     display:flex;
     justify-content: space-between;
-    font-size:10px;
+    font-size:12px;
 }
 
 nav ul {
@@ -84,8 +88,7 @@ nav ul li {
 nav ul li a {
     padding:10px;
     display:block;
-    background:rgba(140, 140, 140, 0.385);
-    text-transform: uppercase;
+    background:rgb(26, 26, 26);
     
 }
 
@@ -278,11 +281,6 @@ text-align:right;
     background:rgba(0, 0, 0, 0.296);
 }
 
-button {
-    border-radius:2px;
-    padding: 10px;
-    font-size:10px;
-}
 
 .errorback {
     
@@ -394,7 +392,11 @@ button {
     padding-right:5px;
     
 }
-
+.username {
+    background:rgb(36, 36, 36);
+    padding:10px;
+    display:inline-blocK;
+}
 .response {
     background:green;
     color:white;
@@ -412,26 +414,22 @@ button {
     color:white;
 }
 
+.chat-wrapper {
+    height:100%;
+    display:flex;
+    flex-direction:column;
+}
+
 .chat {
-    margin:0;
-    height:100vh;
-    overflow-y:hidden;
+    height:100%;
 }
 
-html {
+.chat-container {
+    display:grid;
+    grid-template-columns: 25% 1fr;
+    height:90vh;
 }
 
-.navbar-chat-fix {
-    position:absolute;
-    padding:10px;
-    width:100vw;
-}
-
-.chat-messages {
-    height:100vh;
-    overflow-y:scroll;
-    margin-bottom:10px;
-}
 
 .message-wrapper {
     display:flex;
@@ -458,11 +456,18 @@ html {
 
 
 .chat-input {
-    position:absolute;
-    bottom:0;
-    left:0;
+    margin:auto 0;
 }
 
+.chat-sidebar {
+    background:rgb(24, 24, 24);
+    display:flex;
+    flex-direction: column;
+}
+
+.chat-sidebar > div{
+    height:100%;
+}
 
 .chat-input input {
     width:100%;
@@ -470,6 +475,23 @@ html {
 
 .chat-input > div {
     display:flex;
+}
+
+
+
+
+.config-category {
+    width:100%;
+    display:flex;
+    margin-bottom:10px;
+}
+
+.config-category > div {
+    width:100%;
+}
+
+.config-category button {
+    height:100%;
 }
 
 @keyframes slideInError {

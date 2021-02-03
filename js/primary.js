@@ -1,5 +1,6 @@
 firebase.auth().onAuthStateChanged((user) => {
     if(user) {
+        if(model.app.on_page == '') {model.app.on_page = 'main'}
         getData(user.uid);
     }
     if(!user) {
@@ -31,11 +32,12 @@ function updateScreen() {
             if (model.app.on_page == 'config') {
                 configScreen();
             }
-            
-            if(!model.app.on_page) {
-                mainScreen();
-        
+
+            if (model.app.on_page == 'profile') {
+                console.log('knoobs')
+                profileScreen();
             }
+
         } else {
             if (model.app.on_page == 'login') {
                 loginScreen();

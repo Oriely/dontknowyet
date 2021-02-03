@@ -2,8 +2,8 @@
 let db = firebase.firestore();
 let model = {
     app: {
-        pages: ['login', 'register', 'main', 'config', 'history', 'chat'],
-        on_page: 'login',
+        pages: ['login', 'register', 'main', 'config', 'history', 'chat', 'profile'],
+        on_page: '',
         todo_viewmode: 'list',
         edit_mode: false,
         mobile: false,
@@ -86,11 +86,15 @@ async function getData(uid) {
             </div>
         </div>
         `;
+        const userInformation = await db.collection('users').doc(uid).get();
+        
         const todos = db.collection('todos').doc(uid);
 
         const ongoingTodos = await todos.collection('ongoing').get();
         
         const completedTodos = await todos.collection('completed').get();
+
+        console.log(completedTodos.size)
         
         for(const doc of ongoingTodos.docs) {
 
@@ -98,6 +102,8 @@ async function getData(uid) {
         }
         
         const dbSettingsRef = db.collection('user_settings').doc(uid);
+        
+        model.data.user.info = userInformation.data();
 
         
         const userSettings = await dbSettingsRef.get();

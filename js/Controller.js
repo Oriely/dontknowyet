@@ -208,14 +208,8 @@ function completeTodo(key) {
 
                 data.date_completed = Date.now();
     
-                db.collection("todos").doc(uid).collection('ongoing').doc(key).delete().then(function() {
-    
-                    console.log("Document successfully deleted!");
-    
-                }).catch(function(error) {
-    
-                    console.error("Error removing document: ", error);
-    
+                db.collection("todos").doc(uid).collection('ongoing').doc(key).delete().then(function(){}).catch(function(error) {
+
                 });
     
                 db.collection("todos").doc(user.uid).collection('completed').add(data)    
@@ -262,9 +256,15 @@ function changeViewmode(p) {
 function changeScreen(page) {
     clearErrors();
     
-    if (!model.app.pages.includes(page)) {alert('something');  false} else { model.app.on_page = page; }
+    if (!model.app.pages.includes(page)) {alert('Page not found');  false} else { model.app.on_page = page; }
 
-    updateScreen();
+    // firebase.auth().onAuthStateChanged(user => {
+    //     if(user) {
+    //         getData(user.uid)
+    //     } else {
+            updateScreen();
+    //     }
+    // });
 }
 
 function selectCategory(selected_category) {
@@ -287,15 +287,31 @@ function createNewCategory() {
     firebase.auth().onAuthStateChanged(function (user){
         if(user) {
             const uid = user.uid;
-            db.collection('user_settings').doc(uid).update({
-                todo_categories: firebase.firestore.FieldValue.arrayUnion({
-                    name: model.inputs.new_category.name,
-                    color: model.inputs.new_category.color
-                })
-            })
-            getData(uid);
+            if(model.inputs.new_category.name && model.inputs.new_category.color) {
+                if(!categoryExists(model.inputs.new_category.name)) {
+                    db.collection('user_settings').doc(uid).update({
+                        todo_categories: firebase.firestore.FieldValue.arrayUnion({
+                            name: model.inputs.new_category.name.toLowerCase(),
+                            color: model.inputs.new_category.color.toLowerCase()
+                        })
+                    });
+                getData(uid);
+                } else { alert('category exists'); }
+                model.inputs.new_category.name = '';
+                model.inputs.new_category.color = '';
+            }   
         }
     })
+}
+
+function categoryExists(cat_name){
+    let bool;
+    model.data.user.settings.todo_categories.forEach(element => {
+        if(element.name == cat_name) {
+            bool = true;
+        }
+    });
+    return bool;
 }
 
 function removeCategory(cat_name, cat_color) {

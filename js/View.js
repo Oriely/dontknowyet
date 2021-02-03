@@ -11,11 +11,15 @@ function navbar(css) {
                 </ul>
             </div>
             <div>
+                <span class="username">${model.data.user.info.username}</span>
                 <button ${(model.app.mobile === true ? 'disabled' : '')} 
                 class="switch" onclick="changeViewmode('${(model.app.todo_viewmode === 'panes' ? 'list' : 'panes')}')">
                 ${(model.app.todo_viewmode === 'panes' ? '<i class="fas fa-stream"></i>' : '<i class="fas fa-columns"></i>')}
                 </button>
+                <button onclick="changeScreen('profile')" title="Sign out"><i class="far fa-user-circle"></i></button>
                 <button onclick="signout()" title="Sign out"><i class="fas fa-sign-out-alt"></i></button>
+                
+                
             </div>
 
         </nav>
@@ -230,12 +234,14 @@ function configScreen() {
 
             model.data.user.settings.todo_categories.forEach(cat => {
                 html += `
-                    <div>
-
+                    <div class="config-category">
+                        <div>
                         ${(!model.inputs.edit_category.edit ? '<p>'+ cat.name+ '</p>' : '<input type="te"')}
                         ${(!model.inputs.edit_category.edit ? '<p style="background-color:'+ cat.color + '">'+ cat.color + '</p>' : '<input data-jscolor="{value:\''+ cat.color + '\'}">')}
-                        <button onclick="editCategory('${cat.name}')">Edit</button>
-                        <button onclick="removeCategory('${cat.name}','${cat.color}')">remove category</button>
+                        </div><div>
+                        <!--<button onclick="editCategory('${cat.name}')">Edit</button>-->
+                        
+                        <button onclick="removeCategory('${cat.name}','${cat.color}')">remove category</button></div>
                     </div>
                 `;
             });
@@ -294,22 +300,38 @@ function chatScreen() {
                 <div class="wrapper chat">
             `;
             html += navbar('navbar-chat-fix');
+            html += `
+            <div class="chat-container">
 
-            html += '<div class="chat-messages">';
+                <aside class="chat-sidebar">
+                    <div>Private chats here</div>
+                    <div>Group chats listed here</div>
+                </aside>
+            `;
+
+
+            html += `
+                <section class="chat-wrapper">
+                    <div class="chat-messages">`;
             let x = 0
-            while(x != 20){
-                x++
-                html += `<div class="message-wrapper">
-                <label class="message-username">Johnny96:</label>
-                <div class="message-text">powkfpowekfpowkefpokwepk</div>
-                </div>`
+            while(x != 15){
+                x++;
+                html += `
+                        <div class="message-wrapper">
+                            <label class="message-username">${model.data.user.info.username}</label>
+                            <div class="message-text">powkfpowekfpowkefpokwepk</div>
+                        </div>`
             }
             html += '</div>'
             html += `
-                <div class="chat-input">
-                    <div><input onkeypress="sendChatMessage(event, this.value)"  type="text"><button>Send</button></div>
-
-                </div>
+                    <div class="chat-input">
+                        <div>
+                            <input onkeypress="sendChatMessage(event, this.value)"  type="text">
+                            <button>Send</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
             `;
 
             html += `
@@ -319,6 +341,30 @@ function chatScreen() {
             
             container.innerHTML = html;
 
+        }
+    });
+}
+
+
+function profileScreen() {
+    firebase.auth().onAuthStateChanged((user) => {
+        if(user) {
+            console.log('a');
+
+            let html = '';
+            html+= '<div class="wrapper">'
+            html+= navbar();
+            html+= `
+                <div class="profile">
+                    <div>Username: ${model.data.user.info.username}</div>
+                    <div>Email: ${model.data.user.info.email}</div>
+                    <div>Firstname: ${model.data.user.info.firstname}</div>
+
+                    <div>Lastname: ${model.data.user.info.lastname}</div>
+                </div>
+            `;
+            html += '</div>'
+            container.innerHTML = html;
         }
     });
 }
@@ -341,7 +387,7 @@ function todoCreateHTML(data, id) {
         <div class="todo-content">  
             ${(model.app.edit_mode == 'edit' && id == selectedToEdit ? '<textarea class="edit" onkeyup="model.inputs.todo_edit.content = this.value">'+ data.content + '</textarea>' : data.content)}
             <br>
-            <div class="pri">PRI: ${data.category}</div>
+            <div class="pri">Category: ${data.category}</div>
         </div>
         <div class="todo-controls-edit">
             ${(data.completed == true ? '' : '<button '+ (id != model.inputs.todo_edit.selectedToEdit && model.app.edit_mode === true ? 'disabled ' : '') + 'onclick="editTodo(\''+ id +'\')">' + (id == model.inputs.todo_edit.selectedToEdit1 ? (model.app.edit_mode === true ? 'Save' : 'Edit') : 'Edit') + '</button>')}
@@ -369,3 +415,5 @@ function getCategory(cat) {
         }
     } else return '';
 }
+
+
