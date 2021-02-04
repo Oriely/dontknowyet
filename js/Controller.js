@@ -1,11 +1,11 @@
 
 function login(e, form) {
     e.preventDefault();
-    
+    clearErrors();
     firebase.auth().onAuthStateChanged((user) => {
         if(!user) {
-            clearErrors();
-
+            if (debounce) return;
+            debounce = true;
             let email = form['login-email'].value
             
             let password = form['login-password'].value;
@@ -13,11 +13,17 @@ function login(e, form) {
             if (email && password) {
                 firebase.auth().signInWithEmailAndPassword(email, password)
                     .then((user) => {
+                        model.app.on_page = 'main';
+                        debounce = false;
                         
                     })
                     .catch((error) => {
+                        console.log('error')
+                        console.log(error)
                         const errorCode = error.code;
-                        errorHandler(fbErrors[errorCode]);// TODO fiks
+                        errorHandler((fbErrors[errorCode] ? fbErrors[errorCode] : error));// TODO fiks
+                        debounce = false;
+
                         updateScreen();
                     });
             } else {
@@ -29,11 +35,12 @@ function login(e, form) {
     
 }
 
-async function signout() {
+
+function signout() {
     clearErrors();
-    await firebase.auth().signOut();
+    firebase.auth().signOut();
     model.app.on_page = '';
-    updateScreen();
+    clearModel();
 }
 
 
@@ -70,6 +77,8 @@ function register(e, form) {
             updateScreen();
 
             if(validateEmail(email) && password.length >= 8 && password_comf === password) {
+                if (debounce) return;
+                debounce = true;
                 firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((response) => {
                     const uid = response.user.uid
@@ -114,9 +123,11 @@ function register(e, form) {
                         .catch((err) => {
                             console.log(err);
                         });
+                    debounce = false;
                     model.app.on_page = 'main';
                 })
                 .catch((error) => {
+                    debounce = false;
                     const errorCode = error.code;
                     console.log('asdasd')
                     errorHandler(fbErrors[errorCode]);
@@ -135,7 +146,9 @@ function addTodo() {
                 if (!model.inputs.todo_new.title || !model.inputs.todo_new.content || !model.inputs.todo_new.category) {
                     errorHandler('Please type in something.');
                     updateScreen();
-                } else {   
+                } else {  
+                    if (debounce) return;
+                    debounce = true;
                     // Add a new document with a generated id.
                     db.collection("todos").doc(user.uid).collection('ongoing').add({
                         date_created: Date.now(),
@@ -152,9 +165,10 @@ function addTodo() {
                         model.inputs.todo_new.content = '';
                         model.inputs.todo_new.category = '';
                         getData(user.uid);
+                        debounce = false;
                     })
                     .catch(function(err) {
-
+                        deounce = false;
                         errorHandler(err);
                         updateScreen();
                     });
@@ -202,7 +216,10 @@ function completeTodo(key) {
     firebase.auth().onAuthStateChanged(function (user) {
         const uid = user.uid;
         if (user) {
+
             if(key) { 
+                if(debounce) return;
+                debounce = true;
                 data = model.data.user.todos.ongoing[key];
 
                 data.date_completed = Date.now();
@@ -214,9 +231,10 @@ function completeTodo(key) {
                 db.collection("todos").doc(user.uid).collection('completed').add(data)    
                 .then(function(docRef) {
                     response = 'Nice! you completed a todo.';
+                    debounce = false;
                 })
                 .catch( (err) => {
-                    console.log(err);
+                    debounce = false;
                 });
     
                 
@@ -231,15 +249,19 @@ function removeTodo(todo_id,) {
     clearErrors();
     firebase.auth().onAuthStateChanged( function (user) {
         if(user) {
+            if(debounce) return;
+            debounce = true;
             const uid = user.uid; 
             db.collection('todos').doc(uid).collection('ongoing').doc(todo_id)
             .delete()
             .then(function() {
                 console.log('successfully removeTodo');
+                debounce = false;
                 getData(uid);
             })
             .catch(err   => {
                 console.log(err);
+                debounce = false;
             })
 
     
@@ -251,15 +273,18 @@ function removeCompletedTodo(todo_id,) {
     clearErrors();
     firebase.auth().onAuthStateChanged( function (user) {
         if(user) {
+            if(debounce) return;
+            debounce = true;
             const uid = user.uid; 
             db.collection('todos').doc(uid).collection('completed').doc(todo_id)
             .delete()
             .then(function() {
-                console.log('successfully removeTodo');
                 getData(uid);
+                debounce = false;
             })
             .catch(err   => {
                 console.log(err);
+                debounce = false;
             })
 
     
@@ -274,7 +299,7 @@ function changeViewmode(p) {
 
 function changeScreen(page) {
     clearErrors();
-    
+    response = '';
     if (!model.app.pages.includes(page)) {alert('Page not found');  false} else { model.app.on_page = page; }
 
     // firebase.auth().onAuthStateChanged(user => {
@@ -306,14 +331,24 @@ function createNewCategory() {
     firebase.auth().onAuthStateChanged(function (user){
         if(user) {
             const uid = user.uid;
+            
             if(model.inputs.new_category.name && model.inputs.new_category.color) {
+                if(debounce) return;
+                debounce = true;
                 if(!categoryExists(model.inputs.new_category.name)) {
+                    
                     db.collection('user_settings').doc(uid).update({
                         todo_categories: firebase.firestore.FieldValue.arrayUnion({
                             name: model.inputs.new_category.name.toLowerCase(),
                             color: model.inputs.new_category.color.toLowerCase()
                         })
-                    });
+                    }).then(cat => {
+                        debounce = false
+                    })
+                    .catch((err) => {
+                        debounce = false;
+                    })
+                    ;
                 getData(uid);
                 } else { alert('category exists'); }
                 model.inputs.new_category.name = '';
@@ -337,13 +372,19 @@ function removeCategory(cat_name, cat_color) {
     console.log(cat_name, cat_color)
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
+            if(debounce) return;
+            debounce = true;
             const uid = user.uid;
             db.collection('user_settings').doc(uid).update({
                 todo_categories: firebase.firestore.FieldValue.arrayRemove({
                     name: cat_name,
                     color: cat_color
                 })
-            }).catch((error) => {
+            }).then(cat => {
+                debounce = false;
+            })
+            .catch((error) => {
+                debounce = false;
                 console.log(error)
             });
             getData(uid);
@@ -354,4 +395,11 @@ function removeCategory(cat_name, cat_color) {
 function editCategory(cat) {
     model.inputs.edit_category.selectedToEdit = cat;
     updateScreen();
+}
+
+function clearModel() {
+    model.data.user.todos.completed = {};
+    model.data.user.todos.ongoing = {};
+    model.data.user.settings = {};
+    model.data.user.info = {};
 }

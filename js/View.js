@@ -29,9 +29,7 @@ function navbar(css) {
 function loginScreen() {
     firebase.auth().onAuthStateChanged((user) => {
         if (!user) {
-            errors.forEach((err) => {
-                error += err + '<br>';
-            });
+
 
             container.innerHTML = `
             <div class="wrapper">
@@ -71,11 +69,6 @@ function registerScreen() {
     firebase.auth().onAuthStateChanged((user) => {
 
         if (!user) {
-
-            errors.forEach((err) => {
-                console.log('lol')
-                error += err + '<br>';
-            });
 
     
             container.innerHTML = `
@@ -134,10 +127,6 @@ function mainScreen() {
         if (user) {
             
             let html = '';
-
-            for(let x = 0; x < errors.length; x++) {
-                error += errors[x];
-            }
 
             html += `
             
@@ -296,7 +285,7 @@ function historyScreen() {
                 let count = 0;
                 
             for (const key in model.data.user.todos.completed) {
-                count++
+                
                 console.log('et')
                 console.log(key)
                 html += `
@@ -310,6 +299,7 @@ function historyScreen() {
                         <div><button onclick="removeCompletedTodo('${key}')">Remove</button></div>
                     </div>
                 `;
+                count++
             }
             html += `
                 </div>

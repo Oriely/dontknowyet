@@ -67,6 +67,7 @@ let fbErrors = {
 }
 
 // local
+let debounce = false;
 let critError;
 let error;
 let response = '';
@@ -94,7 +95,6 @@ async function getData(uid) {
         
         const completedTodos = await todos.collection('completed').get();
 
-        console.log(completedTodos.size)
         model.data.user.todos.ongoing = {};
         model.data.user.todos.completed = {};
         for(const doc of ongoingTodos.docs) {

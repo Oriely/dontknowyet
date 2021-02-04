@@ -5,16 +5,22 @@ firebase.auth().onAuthStateChanged((user) => {
     }
     if(!user) {
         if(model.app.on_page == '') {model.app.on_page = 'login'}
+        
         updateScreen();
     }
 });
 
 
 function updateScreen() {
+    if(errors.length != 0) {
+        errors.forEach((err) => {
+            error += err + '<br>';
+        });
+    }
 
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-            
+        
             mainScreen();
 
         
@@ -35,7 +41,6 @@ function updateScreen() {
             }
 
             if (model.app.on_page == 'profile') {
-                console.log('knoobs')
                 profileScreen();
             }
 
