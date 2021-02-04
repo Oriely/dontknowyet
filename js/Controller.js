@@ -97,7 +97,7 @@ function register(e, form) {
                             },
                             {
                                 name: 'personal',
-                                color: 'red'
+                                color: 'green'
         
                             },
                             {
