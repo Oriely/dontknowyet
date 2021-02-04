@@ -280,6 +280,39 @@ function historyScreen() {
             html += `
             <div class="wrapper">
                 ${navbar()}
+                <div class="completed-todos">
+
+
+                    <h2>Completed todos:</h2>
+                    <div class="table-labels">
+                    <div></div>
+                    <div>Category</div>
+                    <div>Title</div>
+                    <div>Content</div>
+                    <div>Date completed</div>
+                    <div></div>
+                    </div>
+                `;
+                let count = 0;
+                
+            for (const key in model.data.user.todos.completed) {
+                count++
+                console.log('et')
+                console.log(key)
+                html += `
+
+                    <div class="completed-row">
+                        <div>${count}</div>
+                        <div>${model.data.user.todos.completed[key].category}</div>
+                        <div>${model.data.user.todos.completed[key].title}</div>
+                        <div>${model.data.user.todos.completed[key].content}</div>
+                        <div>${actuallyReadableDate(model.data.user.todos.completed[key].date_completed)}</div>
+                        <div><button onclick="removeCompletedTodo('${key}')">Remove</button></div>
+                    </div>
+                `;
+            }
+            html += `
+                </div>
             </div>
             `;
 

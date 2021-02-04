@@ -227,12 +227,32 @@ function completeTodo(key) {
             
 }
 
-function removeTodo(todo_id) {
+function removeTodo(todo_id,) {
     clearErrors();
     firebase.auth().onAuthStateChanged( function (user) {
         if(user) {
             const uid = user.uid; 
             db.collection('todos').doc(uid).collection('ongoing').doc(todo_id)
+            .delete()
+            .then(function() {
+                console.log('successfully removeTodo');
+                getData(uid);
+            })
+            .catch(err   => {
+                console.log(err);
+            })
+
+    
+        }
+    });
+}
+
+function removeCompletedTodo(todo_id,) {
+    clearErrors();
+    firebase.auth().onAuthStateChanged( function (user) {
+        if(user) {
+            const uid = user.uid; 
+            db.collection('todos').doc(uid).collection('completed').doc(todo_id)
             .delete()
             .then(function() {
                 console.log('successfully removeTodo');

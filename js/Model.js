@@ -95,10 +95,16 @@ async function getData(uid) {
         const completedTodos = await todos.collection('completed').get();
 
         console.log(completedTodos.size)
-        
+        model.data.user.todos.ongoing = {};
+        model.data.user.todos.completed = {};
         for(const doc of ongoingTodos.docs) {
 
             model.data.user.todos.ongoing[doc.id] = doc.data(); // TODO pagination? make new array of objects for every "20" todo modulo for loop --Scratched--
+        }
+
+        for(const doc of completedTodos.docs) {
+
+            model.data.user.todos.completed[doc.id] = doc.data(); // TODO pagination? make new array of objects for every "20" todo modulo for loop --Scratched--
         }
         
         const dbSettingsRef = db.collection('user_settings').doc(uid);
