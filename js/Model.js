@@ -87,6 +87,7 @@ async function getData(uid) {
             </div>
         </div>
         `;
+        
         const userInformation = await db.collection('users').doc(uid).get();
         
         const todos = db.collection('todos').doc(uid);
@@ -118,11 +119,6 @@ async function getData(uid) {
         } else {
             errorHandler('Did not find user settigns.');     
         }
-
-
-        
-        
-        
 
         updateScreen();
     }

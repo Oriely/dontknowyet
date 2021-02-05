@@ -130,6 +130,8 @@ function register(e, form) {
                     debounce = false;
                     const errorCode = error.code;
                     console.log('asdasd')
+                    console.log(error.message)
+                    console.log(error.code)
                     errorHandler(fbErrors[errorCode]);
                     updateScreen();
                 });

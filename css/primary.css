@@ -518,7 +518,9 @@ text-align:right;
 }
 
 .completed-row:nth-child(even) {
+
     background-color:rgb(36, 36, 36);
+    
 }
 
 .table-labels {
